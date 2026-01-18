@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLRP - Gorebox RP Проект</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Контейнер для анимированных частиц -->
+    <div class="particles-container" id="particles"></div>
+    
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <div class="logo-glow"></div>
+                    <div class="logo-core">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                </div>
+                <div class="logo-text">
+                    <h1>HLRP</h1>
+                    <p>Gorebox RolePlay</p>
+                </div>
+            </div>
+            
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav class="nav" id="mainNav">
+    <a href="#home" class="nav-link" data-target="home">
+        <i class="fas fa-home"></i> Главная
+    </a>
+    <a href="#info" class="nav-link" data-target="info">
+        <i class="fas fa-info-circle"></i> О проекте
+    </a>
+    <a href="#modes" class="nav-link" data-target="modes">
+        <i class="fas fa-gamepad"></i> Режимы
+    </a>
+    <a href="#rules" class="nav-link" data-target="rules">
+        <i class="fas fa-scroll"></i> Правила
+    </a>
+    <a href="#wiki" class="nav-link" data-target="wiki">  <!-- Изменено с #connect на #wiki -->
+        <i class="fas fa-book"></i> Вики  <!-- Изменена иконка -->
+    </a>
+</nav>
+            
+            <div class="header-buttons">
+                <a href="#connect" class="btn btn-play">
+                    <i class="fas fa-play"></i> Играть
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Главный экран -->
+    <section class="hero" id="home">
+        <div class="hero-glow"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span>Gorebox RP</span>
+                </div>
+                <h1 class="hero-title pulse-text">
+                    Добро пожаловать в <span class="highlight">HLRP</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Лучшие ролевые режимы в одном проекте
+                </p>
+                <p class="hero-description">
+                    Проект HLRP объединяет самые популярные ролевые вселенные в Gorebox. 
+                    Станьте частью нашего сообщества и погрузитесь в уникальные атмосферные миры.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#connect" class="btn btn-primary btn-glow">
+                        <i class="fab fa-telegram"></i> Наш Telegram
+                    </a>
+                    <a href="#modes" class="btn btn-secondary btn-glow">
+                        <i class="fas fa-gamepad"></i> Смотреть режимы
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="scene-container">
+                    <div class="floating-cube cube-1">
+                        <div class="cube-content">
+                            <i class="fas fa-radiation"></i>
+                        </div>
+                    </div>
+                    <div class="floating-cube cube-2">
+                        <div class="cube-content">
+                            <i class="fas fa-biohazard"></i>
+                        </div>
+                    </div>
+                    <div class="floating-cube cube-3">
+                        <div class="cube-content">
+                            <i class="fas fa-subway"></i>
+                        </div>
+                    </div>
+                    <div class="central-glow"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Раздел "О проекте" -->
+    <section class="section info-section" id="info">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i> О проекте HLRP
+                </h2>
+                <p class="section-subtitle">Почему стоит выбрать нас</p>
+            </div>
+            
+            <div class="info-grid">
+                <div class="info-card wave-effect">
+                    <div class="info-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Активное сообщество</h3>
+                    <p>Присоединяйтесь к нашему дружному комьюнити в Telegram. Новости, ивенты и общение с игроками.</p>
+                </div>
+                
+                <div class="info-card wave-effect">
+                    <div class="info-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Качественная модерация</h3>
+                    <p>Честная игра и комфортная атмосфера. Наши администраторы следят за соблюдением правил.</p>
+                </div>
+                
+                <div class="info-card wave-effect">
+                    <div class="info-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Уникальные скрипты</h3>
+                    <p>Специально разработанные моды и системы для каждого режима. Регулярные обновления.</p>
+                </div>
+                
+                <div class="info-card wave-effect">
+                    <div class="info-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Регулярные ивенты</h3>
+                    <p>Еженедельные мероприятия, конкурсы и специальные события для всех игроков.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Раздел Режимы -->
+    <section class="section modes-section" id="modes">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-gamepad"></i> Наши режимы
+                </h2>
+                <p class="section-subtitle">Выберите свою вселенную</p>
+            </div>
+            
+            <div class="modes-grid">
+                <!-- Сталкер РП -->
+                <div class="mode-card wave-effect" data-mode="stalker">
+                    <div class="mode-bg"></div>
+                    <div class="mode-overlay"></div>
+                    <div class="mode-content">
+                        <div class="mode-header">
+                            <h3>
+                                <i class="fas fa-radiation"></i> Сталкер РП
+                            </h3>
+                            <span class="mode-status online">Доступно</span>
+                        </div>
+                        <div class="mode-description">
+                            <p>Исследуйте Зону Отчуждения, ищите артефакты и присоединяйтесь к сталкерским группировкам.</p>
+                        </div>
+                        <div class="mode-features">
+                            <span class="feature-tag">Аномалии</span>
+                            <span class="feature-tag">Артефакты</span>
+                            <span class="feature-tag">Фракции</span>
+                        </div>
+                        <div class="mode-cta">
+                            <i class="fas fa-play-circle"></i> Играть сейчас
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- SCP РП -->
+                <div class="mode-card wave-effect" data-mode="scp">
+                    <div class="mode-bg"></div>
+                    <div class="mode-overlay"></div>
+                    <div class="mode-content">
+                        <div class="mode-header">
+                            <h3>
+                                <i class="fas fa-biohazard"></i> SCP РП
+                            </h3>
+                            <span class="mode-status online">Доступно</span>
+                        </div>
+                        <div class="mode-description">
+                            <p>Работайте в Фонде SCP, сдерживайте аномалии или присоединяйтесь к Повстанцам Хаоса.</p>
+                        </div>
+                        <div class="mode-features">
+                            <span class="feature-tag">SCP-объекты</span>
+                            <span class="feature-tag">Исследования</span>
+                            <span class="feature-tag">Секретность</span>
+                        </div>
+                        <div class="mode-cta">
+                            <i class="fas fa-play-circle"></i> Играть сейчас
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Метро 2033 РП -->
+                <div class="mode-card wave-effect" data-mode="metro">
+                    <div class="mode-bg"></div>
+                    <div class="mode-overlay"></div>
+                    <div class="mode-content">
+                        <div class="mode-header">
+                            <h3>
+                                <i class="fas fa-subway"></i> Метро 2033 РП
+                            </h3>
+                            <span class="mode-status development">Скоро</span>
+                        </div>
+                        <div class="mode-description">
+                            <p>Выживайте в постапокалиптическом метро, торгуйте с обитателями станций и сражайтесь с мутантами.</p>
+                        </div>
+                        <div class="mode-features">
+                            <span class="feature-tag">Станции</span>
+                            <span class="feature-tag">Выживание</span>
+                            <span class="feature-tag">Торговля</span>
+                        </div>
+                        <div class="mode-notice">
+                            <i class="fas fa-tools"></i> Режим в активной разработке
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Раздел Правила -->
+    <section class="section rules-section" id="rules">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-scroll"></i> Правила проекта
+                </h2>
+                <p class="section-subtitle">Основные положения для комфортной игры</p>
+            </div>
+            
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-number">01</div>
+                    <h3>Уважение к игрокам</h3>
+                    <p>Запрещены оскорбления, дискриминация и разжигание конфликтов. Уважайте других участников.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-number">02</div>
+                    <h3>Качественный RolePlay</h3>
+                    <p>Соблюдайте роль своего персонажа, развивайте историю и взаимодействуйте с другими игроками.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-number">03</div>
+                    <h3>Запрет читов</h3>
+                    <p>Использование читов, эксплойтов и багов карается перманентным баном без предупреждения.</p>
+                </div>
+                
+                <div class="rule-card">
+                    <div class="rule-number">04</div>
+                    <h3>Следование правилам режима</h3>
+                    <p>Каждый режим имеет свои особенности. Изучайте их перед игрой.</p>
+                </div>
+            </div>
+            
+            <div class="rules-footer">
+                <div class="rules-note">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>Это лишь основные правила. Полный список доступен в нашем Telegram-канале.</p>
+                </div>
+                <a href="https://t.me/HLRPproject" target="_blank" class="btn btn-primary btn-glow">
+                    <i class="fab fa-telegram"></i> Все правила в Telegram
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Раздел Подключение -->
+    <section class="section connect-section" id="connect">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-plug"></i> Как подключиться?
+                </h2>
+                <p class="section-subtitle">Присоединяйтесь к нашему проекту</p>
+            </div>
+            
+            <div class="connect-grid">
+                <div class="connect-card">
+                    <div class="card-header">
+                        <div class="card-icon telegram">
+                            <i class="fab fa-telegram"></i>
+                        </div>
+                        <div>
+                            <h3>Telegram проекта</h3>
+                            <p>Все новости и общение</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p>Подпишитесь на наш канал, чтобы быть в курсе всех новостей, ивентов и анонсов.</p>
+                        <a href="https://t.me/HLRPproject" target="_blank" class="telegram-link btn-glow">
+                            <i class="fab fa-telegram-plane"></i>
+                            <span>@HLRPproject</span>
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="connect-card">
+                    <div class="card-header">
+                        <div class="card-icon game">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div>
+                            <h3>Скачать Gorebox</h3>
+                            <p>Необходимо для игры</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p>Скачайте игру Gorebox на ваше устройство для подключения к серверу.</p>
+                        <div class="store-buttons">
+                            <a href="https://play.google.com/store/apps/details?id=com.F2Games.Gorebox" 
+                               target="_blank" 
+                               class="store-btn playstore btn-glow">
+                                <i class="fab fa-google-play"></i>
+                                <span>Play Market</span>
+                            </a>
+                            <a href="https://apps.apple.com/app/gorebox/id1636701786" 
+                               target="_blank" 
+                               class="store-btn appstore btn-glow">
+                                <i class="fab fa-app-store-ios"></i>
+                                <span>App Store</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="connect-card">
+                    <div class="card-header">
+                        <div class="card-icon instruction">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <h3>Инструкция</h3>
+                            <p>Как начать играть</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ol class="instruction-list">
+                            <li>Скачайте Gorebox с маркета</li>
+                            <li>Подпишитесь на <a href="https://t.me/HLRPproject" target="_blank">@HLRPproject</a></li>
+                            <li>Следите за анонсами сервера</li>
+                            <li>Присоединяйтесь к игре!</li>
+                        </ol>
+                        <div class="connect-note">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Адрес сервера публикуется в Telegram при запуске</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="footer-links">
+    <h4>Навигация</h4>
+    <a href="#home"><i class="fas fa-chevron-right"></i> Главная</a>
+    <a href="#info"><i class="fas fa-chevron-right"></i> О проекте</a>
+    <a href="#modes"><i class="fas fa-chevron-right"></i> Режимы</a>
+    <a href="#rules"><i class="fas fa-chevron-right"></i> Правила</a>
+    <a href="#wiki"><i class="fas fa-chevron-right"></i> Вики</a> <!-- Изменено -->
+</div>
+
+    <!-- Подключение JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
+
