@@ -20,6 +20,7 @@
             position: relative;
         }
 
+        /* Глобальные частицы (фон) */
         .particles {
             position: fixed;
             top: 0;
@@ -56,6 +57,46 @@
             }
         }
 
+        /* Анимация глюка при скролле */
+        @keyframes glitchScroll {
+            0% { transform: translate(0); opacity: 1; }
+            25% { transform: translate(-2px, 1px); opacity: 0.95; }
+            50% { transform: translate(2px, -1px); opacity: 0.98; }
+            75% { transform: translate(-1px, 2px); opacity: 0.96; }
+            100% { transform: translate(0); opacity: 1; }
+        }
+
+        body.scroll-glitch .main-content {
+            animation: glitchScroll 0.1s infinite;
+        }
+
+        body.scroll-glitch .rules-container {
+            filter: blur(1px);
+        }
+
+        /* Чёрные квадраты (появляются при скролле) */
+        .glitch-block {
+            position: fixed;
+            background: #000000;
+            z-index: 500;
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
+        }
+
+        /* Затемнение при скролле */
+        .darkness-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            pointer-events: none;
+            z-index: 400;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
         .header {
             position: fixed;
             top: 0;
@@ -66,6 +107,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            background: rgba(26,26,26,0.8);
+            backdrop-filter: blur(10px);
         }
 
         .burger-btn {
@@ -222,6 +265,7 @@
             padding: 80px 24px 80px;
             position: relative;
             z-index: 1;
+            transition: filter 0.2s;
         }
 
         .hero-title {
@@ -575,57 +619,227 @@
             margin-bottom: 8px;
         }
 
+        /* Нормальный футер (информация о защите) */
+        .normal-footer {
+            width: 100%;
+            background: #1a1c24;
+            border-top: 1px solid #3a3a3a;
+            padding: 40px 24px 30px;
+            margin-top: 60px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #8a8faa;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .footer-col {
+            text-align: left;
+        }
+
+        .footer-col h4 {
+            color: #ccd;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .footer-col p {
+            margin-bottom: 6px;
+            font-size: 0.8rem;
+        }
+
+        .footer-bottom {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #2a2a3a;
+            font-size: 0.7rem;
+        }
+
+        /* Зона глюков и бездны */
+        .abyss-trigger {
+            height: 150px;
+            width: 100%;
+            position: relative;
+            pointer-events: none;
+        }
+
+        .void-section {
+            background: #000000;
+            width: 100%;
+            min-height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-top: -2px;
+            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
+            padding: 80px 20px;
+        }
+
+        .singularity {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .singularity-core {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, #9b30ff 0%, #4a0e8a 70%);
+            border-radius: 50%;
+            box-shadow: 0 0 60px #9b30ff, inset 0 0 20px rgba(255,255,255,0.5);
+            z-index: 20;
+            transition: all 0.2s;
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 30px #9b30ff; transform: scale(1); }
+            50% { box-shadow: 0 0 80px #c04bff; transform: scale(1.05); }
+            100% { box-shadow: 0 0 30px #9b30ff; transform: scale(1); }
+        }
+
+        .singularity:hover .singularity-core {
+            transform: scale(1.15);
+            box-shadow: 0 0 100px #c04bff;
+        }
+
+        .orbit-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #c04bff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #c04bff;
+            animation: orbitAbyss linear infinite;
+        }
+
+        @keyframes orbitAbyss {
+            from { transform: rotate(0deg) translateX(140px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(140px) rotate(-360deg); }
+        }
+
+        /* Кодовый замок, CMD, постоянное досье */
+        .code-lock-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 3000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+        }
+        .code-lock-overlay.active { opacity: 1; visibility: visible; }
+        .code-lock {
+            background: #0a0c12;
+            border: 2px solid #4a4f6a;
+            border-radius: 16px;
+            padding: 32px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .code-lock h3 { color: #ffaa66; margin-bottom: 20px; font-family: 'Courier New', monospace; }
+        .code-lock input { width: 100%; padding: 12px; background: #1a1c24; border: 1px solid #4a4f6a; color: #88aadd; text-align: center; margin-bottom: 20px; font-family: 'Courier New', monospace; }
+        .code-lock button { background: #2a2a2a; border: none; padding: 10px 24px; color: #ccc; cursor: pointer; margin: 0 8px; border-radius: 8px; }
+        .code-error { color: #ff7777; margin-top: 12px; font-family: monospace; }
+
+        .cmd-terminal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            width: 90%;
+            max-width: 600px;
+            background: #0a0c12;
+            border: 2px solid #4a6a4a;
+            border-radius: 8px;
+            z-index: 3500;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            font-family: 'Courier New', monospace;
+            box-shadow: 0 0 30px rgba(0,255,0,0.2);
+        }
+        .cmd-terminal.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+        .cmd-header { background: #1a1c24; padding: 10px 16px; border-bottom: 1px solid #4a6a4a; display: flex; justify-content: space-between; }
+        .cmd-close { background: none; border: none; color: #ff8888; cursor: pointer; font-size: 1.2rem; }
+        .cmd-body { padding: 20px; max-height: 300px; overflow-y: auto; background: #050508; }
+        .cmd-line { color: #88ff88; margin-bottom: 8px; }
+
+        .permanent-dossier {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            width: 90%;
+            max-width: 650px;
+            height: 70%;
+            max-height: 500px;
+            background: #d4c9a8;
+            border-left: 8px solid #8b7355;
+            border-right: 8px solid #8b7355;
+            font-family: 'Courier New', monospace;
+            z-index: 4000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 20px 20px 50px rgba(0,0,0,0.8);
+        }
+        .permanent-dossier.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+        .dossier-header { background: #8b7355; padding: 12px 20px; display: flex; justify-content: space-between; cursor: move; }
+        .dossier-header h3 { color: #2c1a0e; font-size: 1.1rem; }
+        .dossier-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #2c1a0e; }
+        .dossier-body { padding: 24px; overflow-y: auto; flex: 1; color: #2c1a0e; line-height: 1.6; }
+        .dossier-body .deleted { background: #000; color: #ff7777; padding: 0 4px; display: inline-block; }
+
         @media (min-width: 768px) {
-            .burger-btn {
-                display: flex;
-            }
-            .sidebar {
-                left: 0 !important;
-                width: 260px;
-                background: #181818;
-                box-shadow: 2px 0 20px rgba(0, 0, 0, 0.5);
-            }
-            .overlay {
-                display: none;
-            }
-            .main-content {
-                margin-left: 260px;
-                padding-top: 60px;
-            }
-            .header {
-                left: 260px;
-                width: calc(100% - 260px);
-                right: 0;
-            }
-            .hero-title {
-                margin-top: 0px;
-            }
+            .burger-btn { display: flex; }
+            .sidebar { left: 0 !important; width: 260px; background: #181818; }
+            .main-content { margin-left: 260px; padding-top: 60px; }
+            .header { left: 260px; width: calc(100% - 260px); right: 0; }
+            .hero-title { margin-top: 0px; }
+            .normal-footer { margin-left: 260px; width: calc(100% - 260px); }
+            .void-section { margin-left: 260px; width: calc(100% - 260px); }
         }
 
         @media (max-width: 480px) {
-            .hero-title {
-                margin-bottom: 32px;
-            }
-            .section h2 {
-                font-size: 1.5rem;
-            }
-            .spoiler-header {
-                font-size: 1rem;
-                padding: 12px 16px;
-            }
-            .torn-dossier {
-                width: 95%;
-                padding: 18px 16px;
-            }
-            .torn-dossier h2 {
-                font-size: 1.1rem;
-            }
+            .hero-title { margin-bottom: 32px; }
+            .section h2 { font-size: 1.5rem; }
+            .spoiler-header { font-size: 1rem; padding: 12px 16px; }
+            .torn-dossier { width: 95%; padding: 18px 16px; }
+            .torn-dossier h2 { font-size: 1.1rem; }
+            .permanent-dossier { width: 95%; height: 80%; }
         }
     </style>
 </head>
 <body>
 
 <div class="particles" id="particles"></div>
+<div class="darkness-overlay" id="darknessOverlay"></div>
 
 <div class="header">
     <button class="burger-btn" id="burgerBtn" aria-label="Меню">
@@ -778,7 +992,6 @@
             <div class="rule-text">
                 <p style="margin-bottom: 20px; color: #cccccc;">📖 Свод правил для режима Сталкер.</p>
 
-                <!-- Дезертирство -->
                 <div class="spoiler-block">
                     <div class="spoiler-header" data-spoiler="stalker1">
                         <span>1. Правило Дезертирства</span>
@@ -795,7 +1008,6 @@
                     </div>
                 </div>
 
-                <!-- Рейды и Штурмы -->
                 <div class="spoiler-block">
                     <div class="spoiler-header" data-spoiler="stalker2">
                         <span>2. Правило Рейдов и Штурмов</span>
@@ -896,7 +1108,65 @@
             </div>
         </section>
     </div>
+
+    <!-- НОРМАЛЬНЫЙ ФУТЕР -->
+    <div class="normal-footer" id="normalFooter">
+        <div class="footer-grid">
+            <div class="footer-col"><h4>🔒 ЗАЩИТА САЙТА</h4><p>Протокол: TLS 1.3</p><p>Шифрование: AES-256-GCM</p><p>Брандмауэр: Активен</p><p>DDoS защита: Cloudflare</p></div>
+            <div class="footer-col"><h4>📜 ПРАВОВАЯ ИНФОРМАЦИЯ</h4><p>© HLRP Project 2024</p><p>Все права защищены</p><p>Политика конфиденциальности</p></div>
+            <div class="footer-col"><h4>📞 КОНТАКТЫ</h4><p>support@hlrp.ru</p><p>Discord: discord.gg/hlrp</p></div>
+        </div>
+        <div class="footer-bottom">HLRP — Helkin Laboratory for Research & Prototyping. Сертификат безопасности: LEVEL 5</div>
+    </div>
+
+    <!-- ЗОНА ГЛЮКОВ И БЕЗДНЫ -->
+    <div class="abyss-trigger" id="abyssTrigger"></div>
+    <div class="void-section" id="voidSection">
+        <div class="singularity" id="singularity">
+            <div class="singularity-core"></div>
+        </div>
+    </div>
 </main>
+
+<!-- Кодовый замок -->
+<div class="code-lock-overlay" id="codeLockOverlay">
+    <div class="code-lock">
+        <h3>🔐 АНОМАЛЬНЫЙ КОДОВЫЙ ЗАМОК</h3>
+        <input type="text" id="codeInput" placeholder="ВВЕДИТЕ КОД" maxlength="10" autocomplete="off">
+        <button id="submitCode">ПОДТВЕРДИТЬ</button>
+        <button id="closeCodeLock">ОТМЕНА</button>
+        <div class="code-error" id="codeError"></div>
+    </div>
+</div>
+
+<!-- CMD Терминал -->
+<div class="cmd-terminal" id="cmdTerminal">
+    <div class="cmd-header">
+        <span>▶ CMD.EXE • HLRP_SECURE_TERMINAL</span>
+        <button class="cmd-close" id="cmdClose">✕</button>
+    </div>
+    <div class="cmd-body" id="cmdBody">
+        <div class="cmd-line">> ACCESSING SECURE DATABASE...</div>
+    </div>
+</div>
+
+<!-- Постоянное досье (продолжение) -->
+<div class="permanent-dossier" id="permanentDossier">
+    <div class="dossier-header">
+        <h3>📄 ДОСЬЕ HLRP • УРОВЕНЬ ДОСТУПА: 5 • [РАСШИФРОВАНО]</h3>
+        <button class="dossier-close" id="dossierClose">✕</button>
+    </div>
+    <div class="dossier-body" id="dossierBody">
+        <p><strong>*Продолжение досье •••••*</strong></p>
+        <p>Корпорация HLRP (Helkin Laboratory for Research & Prototyping) основана 12 мая 2024 года. Как вы уже знаете, корпорация занималась экспериментами, но мало кто знает, какие были цели.</p>
+        <p>Неизвестный чёрный треугольник — он же система <strong>"Хелли"</strong> — была создана корпорацией для поддержания безопасности. Тогда компания имела совершенно другие цели, а именно <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span>.</p>
+        <p>По итогу "Хелли" начал сбоить, и его решили заменить на <strong>"Хелли 2.0"</strong>. Но старая версия не была удалена или остановлена — она обрела некий разум и устроила перебои во время того самого эксперимента.</p>
+        <p><strong>"Хелли" (он же Субъект 01) уничтожил корпорацию.</strong></p>
+        <hr>
+        <p style="font-style: italic; color: #5a4a2a;">⚠️ ДОСТУП ПРЕДОСТАВЛЕН ТОЛЬКО ПЕРСОНАЛУ УРОВНЯ 5. ЛЮБАЯ УТЕЧКА ДАННЫХ КАРАЕТСЯ ЛИКВИДАЦИЕЙ.</p>
+        <p style="margin-top: 12px;"><span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span> — дальнейшая информация отсутствует. Система "Хелли" продолжает функционировать в автономном режиме.</p>
+    </div>
+</div>
 
 <script>
     // Частицы
@@ -916,7 +1186,57 @@
     }
     createParticles();
 
-    // Пасхалка
+    // Орбитальные частицы для сингулярности
+    const singularity = document.getElementById('singularity');
+    for (let i = 0; i < 24; i++) {
+        const orbitPart = document.createElement('div');
+        orbitPart.classList.add('orbit-particle');
+        const duration = Math.random() * 8 + 4;
+        const delay = Math.random() * 8;
+        orbitPart.style.animation = `orbitAbyss ${duration}s linear infinite`;
+        orbitPart.style.animationDelay = `${delay}s`;
+        singularity.appendChild(orbitPart);
+    }
+
+    // Эффект скролла: глюки, чёрные квадраты, затемнение
+    let glitchBlocks = [];
+    function createGlitchBlock() {
+        const block = document.createElement('div');
+        block.className = 'glitch-block';
+        block.style.width = Math.random() * 200 + 50 + 'px';
+        block.style.height = Math.random() * 150 + 30 + 'px';
+        block.style.left = Math.random() * window.innerWidth + 'px';
+        block.style.top = Math.random() * window.innerHeight + 'px';
+        block.style.zIndex = 999;
+        document.body.appendChild(block);
+        glitchBlocks.push(block);
+        setTimeout(() => { if(block.parentElement) block.remove(); }, 300);
+    }
+
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        const docHeight = document.body.scrollHeight - window.innerHeight;
+        const progress = scrollY / docHeight;
+        
+        if (progress > 0.6) {
+            document.body.classList.add('scroll-glitch');
+            if (Math.random() > 0.7) createGlitchBlock();
+            const darkOpacity = Math.min((progress - 0.6) / 0.3, 0.85);
+            document.getElementById('darknessOverlay').style.opacity = darkOpacity;
+        } else {
+            document.body.classList.remove('scroll-glitch');
+            document.getElementById('darknessOverlay').style.opacity = 0;
+        }
+
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            glitchBlocks.forEach(b => b.remove());
+            glitchBlocks = [];
+        }, 500);
+    });
+
+    // Пасхалка с HLRP
     const hero = document.getElementById('heroTitle');
     const scpQuestion = document.getElementById('scpQuestionBtn');
     let clickCount = 0;
@@ -927,42 +1247,43 @@
     let dossierElement = null;
     let questionShown = false;
 
-    function showTornDossier() {
-        if (dossierElement) return;
-        
-        const dossier = document.createElement('div');
-        dossier.className = 'torn-dossier';
-        dossier.innerHTML = `
-            <div style="text-align: center;">
-                <h2>ДОСЬЕ <span>[ДАННЫЕ УДАЛЕНЫ]</span></h2>
-            </div>
-            <p><strong>Сущность <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span></strong> — чёрный треугольник неизвестного происхождения, состоит из <span class="deleted glitch">[ДАННЫЕ УДАЛЕНЫ]</span> и <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span>, способен <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span>, также обитает на просторах этого сайта.</p>
-            <p>Этот сайт — это не просто правила какого-то проекта, это одна из аномалий лаборатории в Дании, что уже является зоной отчуждения.</p>
-            <div class="stamp">⚠️ ДОСЬЕ ПОВРЕЖДЕНО • УТЕЧКА ДАННЫХ • УРОВЕНЬ ДОСТУПА: [СКРЫТ]</div>
-        `;
-        document.body.appendChild(dossier);
-        dossierElement = dossier;
-        
-        setTimeout(() => dossier.classList.add('show'), 10);
-        
-        let glitchInterval = setInterval(() => {
-            document.querySelectorAll('.deleted').forEach(span => {
-                if (Math.random() > 0.7) {
-                    span.style.opacity = '0.7';
-                    setTimeout(() => span.style.opacity = '1', 50);
-                }
-            });
-        }, 200);
-        
+  function showTornDossier() {
+    if (dossierElement) return;
+    
+    const dossier = document.createElement('div');
+    dossier.className = 'torn-dossier';
+    dossier.innerHTML = `
+        <div style="text-align: center;">
+            <h2>ДОСЬЕ <span>[ДАННЫЕ УДАЛЕНЫ]</span></h2>
+        </div>
+        <p><strong>Сущность <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span></strong> — чёрный треугольник неизвестного происхождения, состоит из <span class="deleted glitch">[ДАННЫЕ УДАЛЕНЫ]</span> и <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span>, способен <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span>, также обитает на просторах этого сайта.</p>
+        <p>Этот сайт — это не просто правила какого-то проекта, это одна из аномалий лаборатории в Дании, что уже является зоной отчуждения.</p>
+        <p><strong style="color: #ffaa66;">ПОДСКАЗКА ДЛЯ КОДОВОГО ЗАМКА: DENMARK01</strong></p>
+        <div class="stamp">⚠️ ДОСЬЕ ПОВРЕЖДЕНО • УТЕЧКА ДАННЫХ • УРОВЕНЬ ДОСТУПА: [СКРЫТ]</div>
+    `;
+    document.body.appendChild(dossier);
+    dossierElement = dossier;
+    
+    setTimeout(() => dossier.classList.add('show'), 10);
+    
+    let glitchInterval = setInterval(() => {
+        document.querySelectorAll('.deleted').forEach(span => {
+            if (Math.random() > 0.7) {
+                span.style.opacity = '0.7';
+                setTimeout(() => span.style.opacity = '1', 50);
+            }
+        });
+    }, 200);
+    
+    setTimeout(() => {
+        dossier.classList.remove('show');
         setTimeout(() => {
-            dossier.classList.remove('show');
-            setTimeout(() => {
-                if (dossierElement?.parentElement) dossierElement.remove();
-                dossierElement = null;
-                clearInterval(glitchInterval);
-            }, 400);
-        }, 4000);
-    }
+            if (dossierElement?.parentElement) dossierElement.remove();
+            dossierElement = null;
+            clearInterval(glitchInterval);
+        }, 400);
+    }, 6000);
+}
 
     function createTriangle(x, y) {
         if (triangle) triangle.remove();
@@ -987,8 +1308,6 @@
                     tri.remove();
                     triangle = null;
                     isFalling = false;
-                    
-                    // Показываем знак вопроса после падения треугольника
                     if (!questionShown) {
                         scpQuestion.classList.add('show');
                         questionShown = true;
@@ -1022,9 +1341,74 @@
         }
     });
 
-    // Клик по знаку вопроса
     scpQuestion.addEventListener('click', () => {
         showTornDossier();
+    });
+
+    // Кодовый замок + сингулярность
+    const blackHoleCore = document.getElementById('singularity');
+    const codeLockOverlay = document.getElementById('codeLockOverlay');
+    const codeInput = document.getElementById('codeInput');
+    const submitCode = document.getElementById('submitCode');
+    const closeCodeLock = document.getElementById('closeCodeLock');
+    const codeError = document.getElementById('codeError');
+    const cmdTerminal = document.getElementById('cmdTerminal');
+    const cmdClose = document.getElementById('cmdClose');
+    const permanentDossierEl = document.getElementById('permanentDossier');
+    const dossierCloseBtn = document.getElementById('dossierClose');
+    let dossierUnlocked = false;
+
+    blackHoleCore.addEventListener('click', () => {
+        if (dossierUnlocked) {
+            permanentDossierEl.classList.add('active');
+        } else {
+            codeLockOverlay.classList.add('active');
+            codeInput.value = '';
+            codeError.textContent = '';
+        }
+    });
+
+    submitCode.addEventListener('click', () => {
+        if (codeInput.value.toUpperCase() === 'DENMARK01') {
+            codeLockOverlay.classList.remove('active');
+            cmdTerminal.classList.add('active');
+            const cmdBody = document.getElementById('cmdBody');
+            cmdBody.innerHTML = '<div class="cmd-line">> ACCESSING SECURE DATABASE...</div>';
+            const lines = ['> VERIFYING CREDENTIALS...', '> CREDENTIALS ACCEPTED', '> INITIATING IDENTITY PROTOCOL...', '> SCANNING USER BIOMETRICS...', '> IDENTITY CONFIRMED', '> ACCESS GRANTED • WELCOME, LEVEL 5 PERSONNEL', '> LOADING CLASSIFIED DOSSIER...'];
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i < lines.length) {
+                    const line = document.createElement('div');
+                    line.className = 'cmd-line';
+                    line.textContent = lines[i];
+                    cmdBody.appendChild(line);
+                    cmdBody.scrollTop = cmdBody.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        cmdTerminal.classList.remove('active');
+                        permanentDossierEl.classList.add('active');
+                        dossierUnlocked = true;
+                    }, 1000);
+                }
+            }, 600);
+        } else {
+            codeError.textContent = '❌ НЕВЕРНЫЙ КОД • ДОСТУП ЗАПРЕЩЁН';
+            codeInput.value = '';
+        }
+    });
+
+    closeCodeLock.addEventListener('click', () => {
+        codeLockOverlay.classList.remove('active');
+    });
+
+    cmdClose.addEventListener('click', () => {
+        cmdTerminal.classList.remove('active');
+    });
+
+    dossierCloseBtn.addEventListener('click', () => {
+        permanentDossierEl.classList.remove('active');
     });
 
     // Бургер
