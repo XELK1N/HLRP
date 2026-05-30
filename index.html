@@ -2,26 +2,26 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>HLRP - Правила</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Ты и я ✨</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
             min-height: 100vh;
-            color: #e0e0e0;
+            background: radial-gradient(circle at 10% 20%, rgb(255, 245, 240), rgb(253, 235, 225));
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Глобальные частицы (фон) */
-        .particles {
+        /* Канвас для частиц на фоне */
+        #particlesCanvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -29,1432 +29,482 @@
             height: 100%;
             pointer-events: none;
             z-index: 0;
-            overflow: hidden;
         }
 
-        .particle {
-            position: absolute;
-            background: rgba(100, 160, 200, 0.4);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: floatUp linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.4;
-            }
-            100% {
-                transform: translateY(-20vh) scale(1.2);
-                opacity: 0;
-            }
-        }
-
-        /* Анимация глюка при скролле */
-        @keyframes glitchScroll {
-            0% { transform: translate(0); opacity: 1; }
-            25% { transform: translate(-2px, 1px); opacity: 0.95; }
-            50% { transform: translate(2px, -1px); opacity: 0.98; }
-            75% { transform: translate(-1px, 2px); opacity: 0.96; }
-            100% { transform: translate(0); opacity: 1; }
-        }
-
-        body.scroll-glitch .main-content {
-            animation: glitchScroll 0.1s infinite;
-        }
-
-        body.scroll-glitch .rules-container {
-            filter: blur(1px);
-        }
-
-        /* Чёрные квадраты (появляются при скролле) */
-        .glitch-block {
-            position: fixed;
-            background: #000000;
-            z-index: 500;
-            pointer-events: none;
-            box-shadow: 0 0 15px rgba(0,0,0,0.8);
-        }
-
-        /* Затемнение при скролле */
-        .darkness-overlay {
+        /* главный контейнер (карточка с предложением) — поверх частиц */
+        .proposal-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: black;
-            pointer-events: none;
-            z-index: 400;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 24px 28px;
-            z-index: 100;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(26,26,26,0.8);
-            backdrop-filter: blur(10px);
-        }
-
-        .burger-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 34px;
-            height: 34px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            padding: 7px 0;
-            z-index: 101;
-            transition: all 0.2s ease;
-        }
-
-        .burger-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .burger-btn span {
-            display: block;
-            width: 100%;
-            height: 2.5px;
-            background: #cccccc;
-            border-radius: 2px;
-            transition: all 0.2s ease;
-        }
-
-        /* SCP знак вопроса */
-        .scp-question {
-            background: none;
-            border: 2px solid #8b8b8b;
-            color: #b0b0b0;
-            font-family: 'Courier New', monospace;
-            font-size: 1.6rem;
-            font-weight: bold;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            background: rgba(30, 30, 40, 0.8);
-            backdrop-filter: blur(4px);
-            opacity: 0;
-            visibility: hidden;
-            z-index: 102;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        .scp-question.show {
-            opacity: 1;
-            visibility: visible;
-            animation: questionBlink 2s infinite;
-        }
-
-        .scp-question:hover {
-            background: #3a3a4a;
-            border-color: #d4af37;
-            color: #d4af37;
-            transform: scale(1.1);
-        }
-
-        @keyframes questionBlink {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; text-shadow: 0 0 5px #b0b0b0; }
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100%;
-            background: #1e1e1e;
-            transition: left 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.1);
-            z-index: 200;
-            padding-top: 90px;
-            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
-        }
-
-        .sidebar.open {
-            left: 0;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 150;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .nav-list {
-            list-style: none;
-            padding: 0 24px;
-        }
-
-        .nav-item {
-            margin-bottom: 10px;
-            opacity: 0;
-            transform: translateX(-20px);
-            animation: navSlideIn 0.4s ease forwards;
-        }
-
-        .nav-item:nth-child(1) { animation-delay: 0.05s; }
-        .nav-item:nth-child(2) { animation-delay: 0.1s; }
-        .nav-item:nth-child(3) { animation-delay: 0.15s; }
-        .nav-item:nth-child(4) { animation-delay: 0.2s; }
-
-        @keyframes navSlideIn {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .nav-link {
-            display: block;
-            padding: 12px 16px;
-            font-size: 1rem;
-            font-weight: 500;
-            color: #cccccc;
-            text-decoration: none;
-            transition: all 0.25s ease;
-            border-radius: 12px;
-        }
-
-        .nav-link:hover {
-            background: #2a2a2a;
-            color: #ffffff;
-            transform: translateX(6px);
-        }
-
-        .main-content {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 80px 24px 80px;
-            position: relative;
-            z-index: 1;
-            transition: filter 0.2s;
+            padding: 20px;
+            transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0.6s;
+            background: transparent;
+            z-index: 10;
+            backdrop-filter: blur(0px);
         }
 
-        .hero-title {
-            font-size: clamp(3.5rem, 12vw, 7rem);
+        .proposal-container.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .card {
+            max-width: 650px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(12px);
+            border-radius: 72px;
+            box-shadow: 0 30px 50px -20px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 245, 235, 0.6);
+            padding: 52px 36px 64px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 245, 235, 0.5);
+        }
+
+        /* большой жирный заголовок — еще эффектнее */
+        .title {
+            font-size: clamp(2.6rem, 9vw, 4rem);
             font-weight: 800;
             letter-spacing: -0.02em;
-            text-align: center;
-            background: linear-gradient(135deg, #f0f0f0 0%, #a0c4e0 100%);
-            -webkit-background-clip: text;
+            margin-bottom: 64px;
+            line-height: 1.2;
+            background: linear-gradient(125deg, #33221c, #aa7a62, #543a2c);
             background-clip: text;
+            -webkit-background-clip: text;
             color: transparent;
-            margin-top: 20px;
-            margin-bottom: 48px;
-            opacity: 0;
-            transform: scale(0.8) translateY(30px);
-            animation: heroAppear 0.9s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        /* контейнер для кнопок */
+        .actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            min-height: 130px;
+            position: relative;
+        }
+
+        /* общий стиль кнопок */
+        .btn {
+            font-size: 1.9rem;
+            font-weight: 550;
+            border: none;
+            padding: 14px 44px;
+            border-radius: 100px;
             cursor: pointer;
-            display: inline-block;
+            font-family: inherit;
+            transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1), background 0.2s, box-shadow 0.2s;
+            background: #ffffff;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(2px);
         }
 
-        @keyframes heroAppear {
-            0% {
-                opacity: 0;
-                transform: scale(0.8) translateY(30px);
-            }
-            50% {
-                opacity: 0.8;
-                transform: scale(1.05) translateY(-5px);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+        .btn-yes {
+            background: #3a2c26;
+            color: #fff5ea;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08), 0 0 0 1px #d9bca8;
         }
 
-        @keyframes shake {
-            0% { transform: translate(0px, 0px) rotate(0deg); }
-            20% { transform: translate(-2px, 1px) rotate(-1deg); }
-            40% { transform: translate(2px, -1px) rotate(1deg); }
-            60% { transform: translate(-1px, 2px) rotate(-0.5deg); }
-            80% { transform: translate(1px, -2px) rotate(0.5deg); }
-            100% { transform: translate(0px, 0px) rotate(0deg); }
+        .btn-yes:hover {
+            transform: translateY(-4px);
+            background: #4f3b32;
+            box-shadow: 0 12px 22px rgba(0, 0, 0, 0.1), 0 0 0 1px #efcfb8;
         }
 
-        .hero-title.shake {
-            animation: shake 0.3s ease-in-out;
+        .btn-yes:active {
+            transform: translateY(3px);
         }
 
-        .triangle {
+        .btn-no {
+            background: rgba(255, 250, 245, 0.9);
+            color: #b77b62;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02), 0 0 0 1px #eed5c6;
+            transition: all 0.2s ease;
+        }
+
+        .btn-no:hover {
+            background: #fffaf5;
+            color: #ca8f74;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.03), 0 0 0 1px #e2cbbc;
+        }
+
+        /* режим побега для кнопки НЕТ */
+        .btn-no.escape-mode {
+            position: absolute;
+            transition: top 0.28s cubic-bezier(0.2, 0.9, 0.5, 1.2), left 0.28s cubic-bezier(0.2, 0.9, 0.5, 1.2);
+            margin: 0;
+            background: rgba(255, 255, 250, 0.95);
+            box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.12), 0 0 0 1px #eed9ce;
+            z-index: 25;
+            backdrop-filter: blur(4px);
+        }
+
+        /* полноэкранный блок "Урааа" — заменяет всё предложение, но с красивой анимацией */
+        .fullscreen-ura {
             position: fixed;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 35px solid #0a0a0a;
-            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
-            pointer-events: none;
-            z-index: 1000;
-            opacity: 1;
-        }
-
-        /* Порванный лист досье */
-        .torn-dossier {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.8) rotate(-5deg);
-            width: 90%;
-            max-width: 550px;
-            background: #d4c9a8;
-            background-image: 
-                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px),
-                linear-gradient(0deg, rgba(0,0,0,0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            padding: 28px 24px;
-            z-index: 2000;
-            box-shadow: 20px 20px 50px rgba(0,0,0,0.8), inset 0 0 10px rgba(0,0,0,0.2);
-            border-left: 8px solid #8b7355;
-            border-right: 8px solid #8b7355;
-            font-family: 'Courier New', monospace;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 40% 40%, #fff3ec, #ffe8dd);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
-            pointer-events: none;
-            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+            transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.2), visibility 0.7s;
+            backdrop-filter: blur(2px);
         }
 
-        .torn-dossier.show {
+        .fullscreen-ura.show {
             opacity: 1;
             visibility: visible;
-            transform: translate(-50%, -50%) scale(1) rotate(0deg);
         }
 
-        .torn-dossier::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: inherit;
-            clip-path: polygon(0% 0%, 100% 0%, 95% 100%, 90% 0%, 85% 100%, 80% 0%, 75% 100%, 70% 0%, 65% 100%, 60% 0%, 55% 100%, 50% 0%, 45% 100%, 40% 0%, 35% 100%, 30% 0%, 25% 100%, 20% 0%, 15% 100%, 10% 0%, 5% 100%, 0% 0%);
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
-        }
-
-        .torn-dossier::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            right: 0;
-            height: 20px;
-            background: inherit;
-            clip-path: polygon(0% 100%, 100% 100%, 95% 0%, 90% 100%, 85% 0%, 80% 100%, 75% 0%, 70% 100%, 65% 0%, 60% 100%, 55% 0%, 50% 100%, 45% 0%, 40% 100%, 35% 0%, 30% 100%, 25% 0%, 20% 100%, 15% 0%, 10% 100%, 5% 0%, 0% 100%);
-        }
-
-        .torn-dossier h2 {
-            font-family: 'Courier New', monospace;
-            font-size: 1.5rem;
+        .ura-message {
+            font-size: clamp(4rem, 20vw, 14rem);
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            font-family: 'Inter', 'Segoe UI', system-ui;
+            transform: scale(0.9);
+            animation: gentleBounce 0.8s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
             text-align: center;
-            color: #2c1a0e;
-            margin-bottom: 20px;
-            letter-spacing: -0.5px;
-            border-bottom: 2px dashed #8b7355;
-            display: inline-block;
-            width: auto;
-            padding-bottom: 5px;
+            background: linear-gradient(125deg, #b45f44, #f5bc9a, #ffd6b3);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(255, 200, 160, 0.3);
         }
 
-        .torn-dossier h2 span {
-            background: #000;
-            color: #ff6666;
-            padding: 0 6px;
-            font-style: normal;
+        @keyframes gentleBounce {
+            0% {
+                transform: scale(0.7);
+                opacity: 0;
+                letter-spacing: 0.2em;
+            }
+            50% {
+                transform: scale(1.08);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+                letter-spacing: 0.04em;
+            }
         }
 
-        .torn-dossier p {
-            color: #2c1a0e;
-            margin-bottom: 14px;
-            line-height: 1.5;
-            font-size: 0.95rem;
-        }
-
-        .torn-dossier .deleted {
-            background: #000;
-            color: #ff7777;
-            padding: 0 4px;
-            display: inline-block;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .torn-dossier .glitch {
-            animation: dossierGlitch 0.15s infinite;
-        }
-
-        @keyframes dossierGlitch {
-            0% { transform: translate(0); opacity: 1; text-shadow: -1px 0 #ff0000; }
-            50% { transform: translate(1px, -1px); text-shadow: 1px 0 #00ff00; }
-            100% { transform: translate(-1px, 1px); text-shadow: -1px 0 #0000ff; }
-        }
-
-        .torn-dossier .stamp {
-            margin-top: 20px;
-            text-align: right;
-            font-size: 0.8rem;
-            color: #8b3a3a;
-            border-top: 1px dashed #8b7355;
-            padding-top: 12px;
-            font-style: italic;
-        }
-
-        .rules-container {
-            max-width: 800px;
-            width: 100%;
+        /* маленькая элегантная линия под ура */
+        .sub-grace {
+            font-size: 1.2rem;
+            color: #ac7e68;
+            margin-top: 24px;
+            font-weight: 350;
             opacity: 0;
-            animation: contentFade 0.6s ease 0.4s forwards;
+            animation: fadeSoft 1s ease 0.4s forwards;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: monospace;
         }
 
-        @keyframes contentFade {
+        @keyframes fadeSoft {
             from {
                 opacity: 0;
-                transform: translateY(25px);
+                transform: translateY(12px);
             }
             to {
-                opacity: 1;
+                opacity: 0.7;
                 transform: translateY(0);
             }
         }
 
-        .section {
-            display: none;
+        /* плавающие сердечки в полноэкранном режиме */
+        .floating-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: floatHeart 5s ease-out forwards;
+            z-index: 31;
+            font-size: 1.4rem;
+            opacity: 0.6;
+            filter: drop-shadow(0 0 2px rgba(0,0,0,0.1));
         }
 
-        .section.active-section {
-            display: block;
-            animation: sectionFade 0.4s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
-        }
-
-        @keyframes sectionFade {
+        @keyframes floatHeart {
             0% {
-                opacity: 0;
-                transform: translateX(-8px);
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
             }
             100% {
-                opacity: 1;
-                transform: translateX(0);
+                transform: translateY(-130vh) rotate(15deg);
+                opacity: 0;
             }
         }
 
-        .section h2 {
-            font-size: 1.7rem;
-            font-weight: 600;
-            color: #dddddd;
-            margin-bottom: 24px;
-            letter-spacing: -0.2px;
-            border-left: 3px solid #5599ff;
-            padding-left: 16px;
-        }
-
-        .rule-text {
-            font-size: 1rem;
-            line-height: 1.65;
-            color: #bbbbbb;
-        }
-
-        .spoiler-block {
-            margin-bottom: 20px;
-            background: #252525;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.2s ease;
-        }
-
-        .spoiler-block:hover {
-            transform: translateX(2px);
-        }
-
-        .spoiler-header {
-            background: #2a2a2a;
-            padding: 14px 20px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 1.1rem;
-            color: #dddddd;
-            transition: all 0.25s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .spoiler-header:hover {
-            background: #353535;
-            padding-left: 24px;
-        }
-
-        .spoiler-header .arrow {
-            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            font-size: 1rem;
-            color: #88aadd;
-        }
-
-        .spoiler-header.open .arrow {
-            transform: rotate(90deg);
-        }
-
-        .spoiler-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
-            padding: 0 20px;
-        }
-
-        .spoiler-content.open {
-            max-height: 2000px;
-            padding: 16px 20px 20px;
-        }
-
-        .rule-list {
-            list-style: none;
-            margin: 0;
-        }
-
-        .rule-list li {
-            margin-bottom: 14px;
-            padding-left: 8px;
-            border-left: 2px solid #3a3a3a;
-            transition: all 0.2s ease;
-        }
-
-        .rule-list li:hover {
-            border-left-color: #88aadd;
-            padding-left: 12px;
-        }
-
-        .rule-number {
-            font-weight: 700;
-            color: #ffffff;
-            background: #3a3a3a;
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 16px;
-            font-size: 0.8rem;
-            margin-right: 10px;
-        }
-
-        .forbidden {
-            color: #ff7777;
-            font-weight: 600;
-        }
-
-        .important {
-            color: #ffaa66;
-            font-weight: 700;
-        }
-
-        .highlight {
-            color: #88aaff;
-        }
-
-        .note {
-            color: #aaaadd;
-            font-style: italic;
-            background: #1e2a2e;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-top: 8px;
-            font-size: 0.9rem;
-            transition: all 0.2s ease;
-        }
-
-        .note:hover {
-            background: #25353a;
-        }
-
-        .info-box {
-            background: #1e2a2e;
-            border-left: 3px solid #5599ff;
-            padding: 16px 20px;
-            margin-top: 24px;
-            border-radius: 12px;
-            transition: all 0.25s ease;
-        }
-
-        .info-box:hover {
-            transform: translateY(-2px);
-            border-left-color: #88aaff;
-        }
-
-        .info-box p {
-            margin-bottom: 8px;
-        }
-
-        /* Нормальный футер (информация о защите) */
-        .normal-footer {
-            width: 100%;
-            background: #1a1c24;
-            border-top: 1px solid #3a3a3a;
-            padding: 40px 24px 30px;
-            margin-top: 60px;
-            text-align: center;
-            font-size: 0.85rem;
-            color: #8a8faa;
-            position: relative;
-            z-index: 10;
-        }
-
-        .footer-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        .footer-col {
-            text-align: left;
-        }
-
-        .footer-col h4 {
-            color: #ccd;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
-        }
-
-        .footer-col p {
-            margin-bottom: 6px;
-            font-size: 0.8rem;
-        }
-
-        .footer-bottom {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #2a2a3a;
-            font-size: 0.7rem;
-        }
-
-        /* Зона глюков и бездны */
-        .abyss-trigger {
-            height: 150px;
-            width: 100%;
-            position: relative;
-            pointer-events: none;
-        }
-
-        .void-section {
-            background: #000000;
-            width: 100%;
-            min-height: 600px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            margin-top: -2px;
-            box-shadow: inset 0 0 100px rgba(0,0,0,0.8);
-            padding: 80px 20px;
-        }
-
-        .singularity {
-            position: relative;
-            width: 250px;
-            height: 250px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .singularity-core {
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, #9b30ff 0%, #4a0e8a 70%);
-            border-radius: 50%;
-            box-shadow: 0 0 60px #9b30ff, inset 0 0 20px rgba(255,255,255,0.5);
-            z-index: 20;
-            transition: all 0.2s;
-            animation: pulseGlow 2s infinite;
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 30px #9b30ff; transform: scale(1); }
-            50% { box-shadow: 0 0 80px #c04bff; transform: scale(1.05); }
-            100% { box-shadow: 0 0 30px #9b30ff; transform: scale(1); }
-        }
-
-        .singularity:hover .singularity-core {
-            transform: scale(1.15);
-            box-shadow: 0 0 100px #c04bff;
-        }
-
-        .orbit-particle {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #c04bff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #c04bff;
-            animation: orbitAbyss linear infinite;
-        }
-
-        @keyframes orbitAbyss {
-            from { transform: rotate(0deg) translateX(140px) rotate(0deg); }
-            to { transform: rotate(360deg) translateX(140px) rotate(-360deg); }
-        }
-
-        /* Кодовый замок, CMD, постоянное досье */
-        .code-lock-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(8px);
-            z-index: 3000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s;
-        }
-        .code-lock-overlay.active { opacity: 1; visibility: visible; }
-        .code-lock {
-            background: #0a0c12;
-            border: 2px solid #4a4f6a;
-            border-radius: 16px;
-            padding: 32px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
-        .code-lock h3 { color: #ffaa66; margin-bottom: 20px; font-family: 'Courier New', monospace; }
-        .code-lock input { width: 100%; padding: 12px; background: #1a1c24; border: 1px solid #4a4f6a; color: #88aadd; text-align: center; margin-bottom: 20px; font-family: 'Courier New', monospace; }
-        .code-lock button { background: #2a2a2a; border: none; padding: 10px 24px; color: #ccc; cursor: pointer; margin: 0 8px; border-radius: 8px; }
-        .code-error { color: #ff7777; margin-top: 12px; font-family: monospace; }
-
-        .cmd-terminal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            width: 90%;
-            max-width: 600px;
-            background: #0a0c12;
-            border: 2px solid #4a6a4a;
-            border-radius: 8px;
-            z-index: 3500;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s;
-            font-family: 'Courier New', monospace;
-            box-shadow: 0 0 30px rgba(0,255,0,0.2);
-        }
-        .cmd-terminal.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
-        .cmd-header { background: #1a1c24; padding: 10px 16px; border-bottom: 1px solid #4a6a4a; display: flex; justify-content: space-between; }
-        .cmd-close { background: none; border: none; color: #ff8888; cursor: pointer; font-size: 1.2rem; }
-        .cmd-body { padding: 20px; max-height: 300px; overflow-y: auto; background: #050508; }
-        .cmd-line { color: #88ff88; margin-bottom: 8px; }
-
-        .permanent-dossier {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            width: 90%;
-            max-width: 650px;
-            height: 70%;
-            max-height: 500px;
-            background: #d4c9a8;
-            border-left: 8px solid #8b7355;
-            border-right: 8px solid #8b7355;
-            font-family: 'Courier New', monospace;
-            z-index: 4000;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 20px 20px 50px rgba(0,0,0,0.8);
-        }
-        .permanent-dossier.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
-        .dossier-header { background: #8b7355; padding: 12px 20px; display: flex; justify-content: space-between; cursor: move; }
-        .dossier-header h3 { color: #2c1a0e; font-size: 1.1rem; }
-        .dossier-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #2c1a0e; }
-        .dossier-body { padding: 24px; overflow-y: auto; flex: 1; color: #2c1a0e; line-height: 1.6; }
-        .dossier-body .deleted { background: #000; color: #ff7777; padding: 0 4px; display: inline-block; }
-
-        @media (min-width: 768px) {
-            .burger-btn { display: flex; }
-            .sidebar { left: 0 !important; width: 260px; background: #181818; }
-            .main-content { margin-left: 260px; padding-top: 60px; }
-            .header { left: 260px; width: calc(100% - 260px); right: 0; }
-            .hero-title { margin-top: 0px; }
-            .normal-footer { margin-left: 260px; width: calc(100% - 260px); }
-            .void-section { margin-left: 260px; width: calc(100% - 260px); }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title { margin-bottom: 32px; }
-            .section h2 { font-size: 1.5rem; }
-            .spoiler-header { font-size: 1rem; padding: 12px 16px; }
-            .torn-dossier { width: 95%; padding: 18px 16px; }
-            .torn-dossier h2 { font-size: 1.1rem; }
-            .permanent-dossier { width: 95%; height: 80%; }
+        @media (max-width: 600px) {
+            .card {
+                padding: 40px 20px 52px;
+                border-radius: 56px;
+            }
+            .btn {
+                font-size: 1.5rem;
+                padding: 12px 32px;
+            }
+            .actions {
+                gap: 28px;
+            }
+            .sub-grace {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="particles" id="particles"></div>
-<div class="darkness-overlay" id="darknessOverlay"></div>
+<!-- Канвас для красивых частиц на фоне -->
+<canvas id="particlesCanvas"></canvas>
 
-<div class="header">
-    <button class="burger-btn" id="burgerBtn" aria-label="Меню">
-        <span></span><span></span><span></span>
-    </button>
-    <button class="scp-question" id="scpQuestionBtn">?</button>
-</div>
-
-<div class="sidebar" id="sidebar">
-    <ul class="nav-list">
-        <li class="nav-item"><a href="#" class="nav-link" data-section="rules-general">Правила поведения</a></li>
-        <li class="nav-item"><a href="#" class="nav-link" data-section="rp-summary">Сводка РП правил</a></li>
-        <li class="nav-item"><a href="#" class="nav-link" data-section="stalker">Правила Сталкер</a></li>
-        <li class="nav-item"><a href="#" class="nav-link" data-section="scp">Правила SCP</a></li>
-    </ul>
-</div>
-
-<div class="overlay" id="overlay"></div>
-
-<main class="main-content">
-    <div class="hero-title" id="heroTitle">HLRP</div>
-
-    <div class="rules-container">
-        <section id="rules-general" class="section active-section">
-            <h2>Правила поведения</h2>
-            <div class="rule-text">
-                <p style="margin-bottom: 20px; color: #cccccc;">📌 Данные правила были созданы для комфортного общения. Если в правилах нет соответствий, то напишите администрации и прочтите сводку.</p>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header open" data-spoiler="behavior1">
-                        <span>1. Основные запреты</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content open" id="behavior1">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">1.1</span> <span class="forbidden">Запрещен</span> флуд и спам с 5-ти сообщений. Реклама разрешена только <span class="important">при согласовании с администрацией</span>.</li>
-                            <li><span class="rule-number">1.2</span> <span class="forbidden">Запрещены</span> оскорбления любых личностей и вещей (будь то религии или семьи). <span class="highlight">Исключение:</span> если оскорбление было написано в шутку, если же вас это задело — напишите администрации.</li>
-                            <li><span class="rule-number">1.3</span> <span class="forbidden">Запрещено</span> обсуждение любых неприятных тем, например: нацизм, религии, терроризм, политики, ЛГБТ, 18+ и прочие. <span class="important">Важно!</span> Если здесь что-то не упомянуто — не значит разрешено!</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="behavior2">
-                        <span>2. Коммуникация</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="behavior2">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">2.1</span> <span class="forbidden">Язык общения:</span> основной — русский. Допускается английский <span class="important">при согласовании с администрацией</span>. <span class="forbidden">Запрещено</span> намеренное коверканье языка / использование жаргона для затруднения понимания.</li>
-                            <li><span class="rule-number">2.2</span> <span class="forbidden">Форма обращения:</span> обязателен нейтрально-деловой тон. <span class="forbidden">Запрещен</span> переход на личности. Недопустимы саркастические / ироничные высказывания в адрес участников.</li>
-                            <li><span class="rule-number">2.3</span> <span class="forbidden">Цитаты и дискуссии:</span> при цитировании обязателен полный контекст. <span class="forbidden">Запрещено</span> искажение слов других участников. Аргументация должна быть логичной и обоснованной.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="behavior3">
-                        <span>3. Технические требования</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="behavior3">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">3.1</span> <span class="forbidden">Никнеймы:</span> <span class="forbidden">Запрещены</span> оскорбительные / провокационные имена. Нельзя имитировать администраторов или известных личностей. Никнеймы не должны содержать рекламу. <span class="forbidden">Запрещено</span> использование нечитаемых символов.</li>
-                            <li><span class="rule-number">3.2</span> <span class="forbidden">Мультиаккаунты:</span> создание дополнительных аккаунтов <span class="forbidden">запрещено</span>. Обход санкций через мультиаккаунты влечёт <span class="important">перманентный бан</span>. Один участник — один аккаунт.</li>
-                            <li><span class="rule-number">3.3</span> <span class="forbidden">Боты и автоматизация:</span> использование ботов только с <span class="important">письменного разрешения администрации</span>. <span class="forbidden">Запрещены</span> скрипты для спама / флуда.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <p><span class="important">📋 Небольшая сводка и дополнительная информация:</span></p>
-                    <p>• Если вы считаете, что игрок сделал что-то не так, вы вправе отправить жалобу.</p>
-                    <p>• Если что-то не озвучено в правилах, но вызывает сомнения, администрация вправе выдать наказание.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="rp-summary" class="section">
-            <h2>Сводка РП правил</h2>
-            <div class="rule-text">
-                <p style="margin-bottom: 20px; color: #cccccc;">📖 Здесь вы можете прочесть сводку РП правил проекта.</p>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="rp1">
-                        <span>1. Нереалистичное поведение</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="rp1">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">1.1</span> <span class="forbidden">Запрещается</span> нереалистичное поведение: невозможные действия, чрезмерный героизм и слова вне РП.</li>
-                        </ul>
-                        <div class="note">📝 Пометка: Если вы встретили человека, говорящего нон-РП слова, сообщите администрации.</div>
-                    </div>
-                </div>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="rp2">
-                        <span>2. FearRP (Страх за жизнь)</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="rp2">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">2.1</span> <span class="forbidden">Запрещается</span> игнорировать угрозу для жизни персонажа. Если на вас направлено оружие — вы обязаны подчиниться.</li>
-                            <li><span class="rule-number">2.2</span> <span class="forbidden">Запрещено</span> совершать самоубийственные действия без РП-обоснования.</li>
-                        </ul>
-                        <div class="note">📝 Пометка: Ваш персонаж хочет жить — отыгрывайте страх адекватно ситуации.</div>
-                    </div>
-                </div>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="rp3">
-                        <span>3. Metagaming (Метагейминг)</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="rp3">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">3.1</span> <span class="forbidden">Запрещается</span> использовать информацию, полученную вне РП.</li>
-                            <li><span class="rule-number">3.2</span> <span class="forbidden">Запрещено</span> передавать внутриигровую информацию через сторонние приложения.</li>
-                        </ul>
-                        <div class="note">📝 Пометка: Знания вашего персонажа ограничены тем, что он видел и слышал лично в игре.</div>
-                    </div>
-                </div>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="rp4">
-                        <span>4. Powergaming (Павергейминг)</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="rp4">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">4.1</span> <span class="forbidden">Запрещается</span> описывать действия, на которые у персонажа физически нет возможности.</li>
-                            <li><span class="rule-number">4.2</span> <span class="forbidden">Запрещено</span> принуждать других игроков к действиям без их согласия.</li>
-                        </ul>
-                        <div class="note">📝 Пометка: Давайте другим игрокам возможность отыграть свои действия.</div>
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <p><span class="important">⚖️ Общие принципы:</span></p>
-                    <p>• Все игроки обязаны поддерживать РП-атмосферу и не мешать отыгрышу других.</p>
-                    <p>• Администрация имеет право трактовать правила в спорных ситуациях.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== ПРАВИЛА СТАЛКЕР ==================== -->
-        <section id="stalker" class="section">
-            <h2>Правила Сталкер</h2>
-            <div class="rule-text">
-                <p style="margin-bottom: 20px; color: #cccccc;">📖 Свод правил для режима Сталкер.</p>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="stalker1">
-                        <span>1. Правило Дезертирства</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="stalker1">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">1</span> Дезертировать можно только когда на базе находятся так же <span class="important">2 человека</span> такой же ГП (группировки).</li>
-                            <li><span class="rule-number">2</span> Дезертиру <span class="forbidden">запрещено</span> заходить на нейтральные ЗЗ (3 РП). 3 РП дается группировке на поиски дезертира. После истечения срока дезертир может вступить в группировку либо остаться сталкером.</li>
-                            <li><span class="rule-number">3</span> У дезертирства <span class="highlight">нет срока</span>. Если его поймали в плен прошлые друзья из группировки, с которой он дезертировал, то они могут его убить — это будет приравниваться к РПК.</li>
-                            <li><span class="rule-number">4</span> Чтобы дезертиру вернуться в ту же группировку (даже после РПК), нужно ждать <span class="important">4 дня</span>. После срока игрок может написать заявку на роль.</li>
-                        </ul>
-                        <div class="note">📝 Пометка: Дезертирство — серьёзный шаг. Отыгрывайте мотивацию персонажа.</div>
-                    </div>
-                </div>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="stalker2">
-                        <span>2. Правило Рейдов и Штурмов</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="stalker2">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">1</span> <span class="highlight">Рейд</span> — нападение на базу в результате войны группировок или с целью наживы. <span class="highlight">Штурм</span> — нападение на базу с целью вызволения заложника или захвата определенного человека в плен.</li>
-                            <li><span class="rule-number">2</span> <span class="forbidden">ЗАПРЕЩЕНО</span> помогать какой-либо из сторон, если РЕЙД/ШТУРМ уже начался.</li>
-                            <li><span class="rule-number">2.1</span> При рейде нейтральными группировками тех, с кем у них нет войны, они автоматически становятся врагами.</li>
-                            <li><span class="rule-number">3</span> Рейд <span class="forbidden">НЕ МОЖЕТ</span> быть произведен на Базу МСОП.</li>
-                            <li><span class="rule-number">4</span> Перед проведением рейда/штурма атакующая сторона <span class="important">ДОЛЖНА</span> предупредить хоста. Без разрешения хоста ничего делать <span class="forbidden">НЕЛЬЗЯ</span>!</li>
-                            <li><span class="rule-number">4.1</span> В момент объявления Рейда атакующая сторона <span class="important">ДОЛЖНА</span> провести разведку и удостовериться, что обороняющихся не менее 3-х, а во время штурма — не более 2-х.</li>
-                            <li><span class="rule-number">5</span> Атакующая сторона <span class="important">ДОЛЖНА</span> уведомить группировку, на которую нападают, объявить условия и причину. Нужно иметь откат/скрин объявления и разведки.</li>
-                            <li><span class="rule-number">6</span> После объявления штурма/рейда сторона атаки должна отойти на <span class="important">более 200м</span> от базы противника. На рейд дается 30 минут, на штурм — 15 минут. Хост скажет, когда можно начинать.</li>
-                            <li><span class="rule-number">6.1</span> Если обороняющаяся сторона открывает огонь или отказывается от условий атакующей стороны <span class="highlight">ДО</span> рейда/штурма — это будет являться началом.</li>
-                            <li><span class="rule-number">6.2</span> При выполнении требования или во время переговоров <span class="forbidden">ЗАПРЕЩЕНО</span> начинать рейд/штурм.</li>
-                            <li><span class="rule-number">7</span> Одиночкам <span class="forbidden">НЕЛЬЗЯ</span> рейдить базы группировок.</li>
-                            <li><span class="rule-number">7.1</span> Одиночкам <span class="forbidden">НЕЛЬЗЯ</span> участвовать на стороне атаки других группировок.</li>
-                            <li><span class="rule-number">8</span> Захватывать заложников во время Рейда/Штурма <span class="highlight">МОЖНО</span>, но не более определенного лимита (на усмотрение хоста).</li>
-                            <li><span class="rule-number">9</span> <span class="forbidden">ЗАПРЕЩЕНО</span> покидать игру во время Рейда/Штурма.</li>
-                            <li><span class="rule-number">10</span> После того как вас убили, вы <span class="forbidden">не должны</span> появляться на базе до момента окончания рейда.</li>
-                            <li><span class="rule-number">11</span> Смерть во время рейда с обеих сторон <span class="highlight">не является РПК</span>.</li>
-                            <li><span class="rule-number">12</span> Заложника во время штурма трогать <span class="forbidden">ЗАПРЕЩЕНО</span>: нельзя его убивать или прятать, он должен сидеть в КПЗ. (Если заложник умер, его судьба зависит от победителя.)</li>
-                            <li><span class="rule-number">13</span> На базу группировки может быть повторно совершен только один рейд/штурм: штурм раз в 2 РП, рейд раз в 4 РП.</li>
-                            <li><span class="rule-number">14</span> Обороняющаяся группировка должна оповестить всех на своей базе о начале штурма/рейда. Атакующей стороне <span class="forbidden">ЗАПРЕЩЕНО</span> брать в плен сталкеров, которые покидают ЗЗ до штурма/рейда.</li>
-                            <li><span class="rule-number">14.1</span> Атакующая сторона <span class="highlight">МОЖЕТ</span> стрелять по всем, кто находится в ЗЗ после начала рейда/штурма.</li>
-                            <li><span class="rule-number">15</span> <span class="forbidden">ЗАПРЕЩЕНО</span> брать на рейд/штурм более одной союзной группировки.</li>
-                            <li><span class="rule-number">16</span> Окончание Рейда/Штурма сообщает Хост.</li>
-                            <li><span class="rule-number">17</span> Штурм может быть объявлен в случае наличия явных доказательств оскорбления вашей группировки или её лидера. <span class="important">Доказательства — скрин/откат.</span></li>
-                        </ul>
-                        <div class="note">📝 Пометка: ГП — группировка. ЗЗ — зона зачистки. РПК — ролевая смерть персонажа. Все спорные моменты решает хост.</div>
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <p><span class="important">⚠️ Общие принципы режима Сталкер:</span></p>
-                    <p>• Соблюдайте иерархию и устав группировки.</p>
-                    <p>• Отыгрыш мутантов и аномалий обязателен.</p>
-                    <p>• Администрация имеет право трактовать правила в спорных ситуациях.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== ПРАВИЛА SCP ==================== -->
-        <section id="scp" class="section">
-            <h2>Правила SCP</h2>
-            <div class="rule-text">
-                <p style="margin-bottom: 20px; color: #cccccc;">📖 Свод правил для SCP-режима проекта.</p>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="scp1">
-                        <span>МДЖ (Мир, Дружба, Жвачка)</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="scp1">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">1</span> Вы <span class="important">не обязаны воевать</span> с людьми из другой фракции или разумными SCP, если на кону стоит ваша с временным партнёром жизнь. <span class="highlight">Но</span> ни одна из сторон <span class="forbidden">не обязана соблюдать мир</span> и может стрелять в спину.</li>
-                            <li><span class="rule-number">2</span> Люди из <span class="important">одной фракции</span> <span class="forbidden">не могут убивать друг друга</span>, если это не обыграно в рамках РП.</li>
-                        </ul>
-                        <div class="note">📝 Временные союзы — дело шаткое. За предательство в рамках РП наказания нет.</div>
-                    </div>
-                </div>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="scp2">
-                        <span>DM (Death Match)</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="scp2">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">1</span> Охрана комплекса <span class="forbidden">не может убивать класс D</span> без убедительной причины. <span class="highlight">НО</span> если у D-класса появилось оружие — оперативники <span class="important">могут убить на месте</span>.</li>
-                            <li><span class="rule-number">2</span> Если вас убил D-класс, вы стали оперативником МОГ, и вы убили D-класса без причины — вам <span class="important">могут предъявить обвинение в MG</span>.</li>
-                        </ul>
-                        <div class="note">📝 Убийство D-класса без причины — нарушение. Оружие в руках — прямое основание для ликвидации.</div>
-                    </div>
-                </div>
-
-                <div class="spoiler-block">
-                    <div class="spoiler-header" data-spoiler="scp3">
-                        <span>Метагейминг (MG)</span>
-                        <span class="arrow">▶</span>
-                    </div>
-                    <div class="spoiler-content" id="scp3">
-                        <ul class="rule-list">
-                            <li><span class="rule-number">Важно</span> Метагейминг <span class="forbidden">разделён между игроками в зависимости от их роли</span>. Чем выше вы в иерархии — тем больше вы знаете об SCP-объектах.</li>
-                        </ul>
-                        <div class="note">📝 Рядовой охраны не знает характеристики SCP-173, а научный сотрудник уровня 4 имеет доступ к досье.</div>
-                    </div>
-                </div>
-
-                <div class="info-box">
-                    <p><span class="important">🔒 Общие принципы SCP-режима:</span></p>
-                    <p>• Соблюдайте субординацию и протоколы Фонда.</p>
-                    <p>• Отыгрыш страха перед аномалиями обязателен (FearRP).</p>
-                    <p>• Администрация имеет право трактовать правила в спорных ситуациях.</p>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- НОРМАЛЬНЫЙ ФУТЕР -->
-    <div class="normal-footer" id="normalFooter">
-        <div class="footer-grid">
-            <div class="footer-col"><h4>🔒 ЗАЩИТА САЙТА</h4><p>Протокол: TLS 1.3</p><p>Шифрование: AES-256-GCM</p><p>Брандмауэр: Активен</p><p>DDoS защита: Cloudflare</p></div>
-            <div class="footer-col"><h4>📜 ПРАВОВАЯ ИНФОРМАЦИЯ</h4><p>© HLRP Project 2024</p><p>Все права защищены</p><p>Политика конфиденциальности</p></div>
-            <div class="footer-col"><h4>📞 КОНТАКТЫ</h4><p>support@hlrp.ru</p><p>Discord: discord.gg/hlrp</p></div>
+<!-- блок с предложением (изначально виден) -->
+<div class="proposal-container" id="proposalContainer">
+    <div class="card">
+        <div class="title">
+            Привет, давай будем встречаться
         </div>
-        <div class="footer-bottom">HLRP — Helkin Laboratory for Research & Prototyping. Сертификат безопасности: LEVEL 5</div>
-    </div>
-
-    <!-- ЗОНА ГЛЮКОВ И БЕЗДНЫ -->
-    <div class="abyss-trigger" id="abyssTrigger"></div>
-    <div class="void-section" id="voidSection">
-        <div class="singularity" id="singularity">
-            <div class="singularity-core"></div>
+        <div class="actions" id="actionsArea">
+            <button class="btn btn-yes" id="yesBtn">Да</button>
+            <button class="btn btn-no" id="noBtn">Нет</button>
         </div>
     </div>
-</main>
-
-<!-- Кодовый замок -->
-<div class="code-lock-overlay" id="codeLockOverlay">
-    <div class="code-lock">
-        <h3>🔐 АНОМАЛЬНЫЙ КОДОВЫЙ ЗАМОК</h3>
-        <input type="text" id="codeInput" placeholder="ВВЕДИТЕ КОД" maxlength="10" autocomplete="off">
-        <button id="submitCode">ПОДТВЕРДИТЬ</button>
-        <button id="closeCodeLock">ОТМЕНА</button>
-        <div class="code-error" id="codeError"></div>
-    </div>
 </div>
 
-<!-- CMD Терминал -->
-<div class="cmd-terminal" id="cmdTerminal">
-    <div class="cmd-header">
-        <span>▶ CMD.EXE • HLRP_SECURE_TERMINAL</span>
-        <button class="cmd-close" id="cmdClose">✕</button>
-    </div>
-    <div class="cmd-body" id="cmdBody">
-        <div class="cmd-line">> ACCESSING SECURE DATABASE...</div>
-    </div>
-</div>
-
-<!-- Постоянное досье (продолжение) -->
-<div class="permanent-dossier" id="permanentDossier">
-    <div class="dossier-header">
-        <h3>📄 ДОСЬЕ HLRP • УРОВЕНЬ ДОСТУПА: 5 • [РАСШИФРОВАНО]</h3>
-        <button class="dossier-close" id="dossierClose">✕</button>
-    </div>
-    <div class="dossier-body" id="dossierBody">
-        <p><strong>*Продолжение досье •••••*</strong></p>
-        <p>Корпорация HLRP (Helkin Laboratory for Research & Prototyping) основана 12 мая 2024 года. Как вы уже знаете, корпорация занималась экспериментами, но мало кто знает, какие были цели.</p>
-        <p>Неизвестный чёрный треугольник — он же система <strong>"Хелли"</strong> — была создана корпорацией для поддержания безопасности. Тогда компания имела совершенно другие цели, а именно <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span>.</p>
-        <p>По итогу "Хелли" начал сбоить, и его решили заменить на <strong>"Хелли 2.0"</strong>. Но старая версия не была удалена или остановлена — она обрела некий разум и устроила перебои во время того самого эксперимента.</p>
-        <p><strong>"Хелли" (он же Субъект 01) уничтожил корпорацию.</strong></p>
-        <hr>
-        <p style="font-style: italic; color: #5a4a2a;">⚠️ ДОСТУП ПРЕДОСТАВЛЕН ТОЛЬКО ПЕРСОНАЛУ УРОВНЯ 5. ЛЮБАЯ УТЕЧКА ДАННЫХ КАРАЕТСЯ ЛИКВИДАЦИЕЙ.</p>
-        <p style="margin-top: 12px;"><span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span> — дальнейшая информация отсутствует. Система "Хелли" продолжает функционировать в автономном режиме.</p>
-    </div>
+<!-- полноэкранный блок "Урааа" -->
+<div id="fullscreenUra" class="fullscreen-ura">
+    <div class="ura-message">Урааа!</div>
+    <div class="sub-grace">✨        ✨ <div>
 </div>
 
 <script>
-    // Частицы
-    function createParticles() {
-        const container = document.getElementById('particles');
-        for (let i = 0; i < 60; i++) {
-            const particle = document.createElement('div');
-            particle.classList.add('particle');
-            particle.style.width = (Math.random() * 4 + 2) + 'px';
-            particle.style.height = particle.style.width;
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.animationDuration = (Math.random() * 8 + 5) + 's';
-            particle.style.animationDelay = (Math.random() * 15) + 's';
-            particle.style.opacity = Math.random() * 0.3 + 0.1;
-            container.appendChild(particle);
-        }
-    }
-    createParticles();
-
-    // Орбитальные частицы для сингулярности
-    const singularity = document.getElementById('singularity');
-    for (let i = 0; i < 24; i++) {
-        const orbitPart = document.createElement('div');
-        orbitPart.classList.add('orbit-particle');
-        const duration = Math.random() * 8 + 4;
-        const delay = Math.random() * 8;
-        orbitPart.style.animation = `orbitAbyss ${duration}s linear infinite`;
-        orbitPart.style.animationDelay = `${delay}s`;
-        singularity.appendChild(orbitPart);
-    }
-
-    // Эффект скролла: глюки, чёрные квадраты, затемнение
-    let glitchBlocks = [];
-    function createGlitchBlock() {
-        const block = document.createElement('div');
-        block.className = 'glitch-block';
-        block.style.width = Math.random() * 200 + 50 + 'px';
-        block.style.height = Math.random() * 150 + 30 + 'px';
-        block.style.left = Math.random() * window.innerWidth + 'px';
-        block.style.top = Math.random() * window.innerHeight + 'px';
-        block.style.zIndex = 999;
-        document.body.appendChild(block);
-        glitchBlocks.push(block);
-        setTimeout(() => { if(block.parentElement) block.remove(); }, 300);
-    }
-
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-        const docHeight = document.body.scrollHeight - window.innerHeight;
-        const progress = scrollY / docHeight;
+    (function() {
+        // ---------- 1. Частицы на фоне (очень красиво, минималистично) ----------
+        const canvas = document.getElementById('particlesCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = window.innerWidth;
+        let height = window.innerHeight;
         
-        if (progress > 0.6) {
-            document.body.classList.add('scroll-glitch');
-            if (Math.random() > 0.7) createGlitchBlock();
-            const darkOpacity = Math.min((progress - 0.6) / 0.3, 0.85);
-            document.getElementById('darknessOverlay').style.opacity = darkOpacity;
-        } else {
-            document.body.classList.remove('scroll-glitch');
-            document.getElementById('darknessOverlay').style.opacity = 0;
+        let particles = [];
+        const PARTICLE_COUNT = 65;
+        
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
         }
-
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-            glitchBlocks.forEach(b => b.remove());
-            glitchBlocks = [];
-        }, 500);
-    });
-
-    // Пасхалка с HLRP
-    const hero = document.getElementById('heroTitle');
-    const scpQuestion = document.getElementById('scpQuestionBtn');
-    let clickCount = 0;
-    let clickTimer = null;
-    let triangle = null;
-    let isFalling = false;
-    let animationId = null;
-    let dossierElement = null;
-    let questionShown = false;
-
-  function showTornDossier() {
-    if (dossierElement) return;
-    
-    const dossier = document.createElement('div');
-    dossier.className = 'torn-dossier';
-    dossier.innerHTML = `
-        <div style="text-align: center;">
-            <h2>ДОСЬЕ <span>[ДАННЫЕ УДАЛЕНЫ]</span></h2>
-        </div>
-        <p><strong>Сущность <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span></strong> — чёрный треугольник неизвестного происхождения, состоит из <span class="deleted glitch">[ДАННЫЕ УДАЛЕНЫ]</span> и <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span>, способен <span class="deleted">[ДАННЫЕ УДАЛЕНЫ]</span>, также обитает на просторах этого сайта.</p>
-        <p>Этот сайт — это не просто правила какого-то проекта, это одна из аномалий лаборатории в Дании, что уже является зоной отчуждения.</p>
-        <p><strong style="color: #ffaa66;">ПОДСКАЗКА ДЛЯ КОДОВОГО ЗАМКА: DENMARK01</strong></p>
-        <div class="stamp">⚠️ ДОСЬЕ ПОВРЕЖДЕНО • УТЕЧКА ДАННЫХ • УРОВЕНЬ ДОСТУПА: [СКРЫТ]</div>
-    `;
-    document.body.appendChild(dossier);
-    dossierElement = dossier;
-    
-    setTimeout(() => dossier.classList.add('show'), 10);
-    
-    let glitchInterval = setInterval(() => {
-        document.querySelectorAll('.deleted').forEach(span => {
-            if (Math.random() > 0.7) {
-                span.style.opacity = '0.7';
-                setTimeout(() => span.style.opacity = '1', 50);
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 5 + 2; // 2-7px
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.3 + 0.1;
+                this.opacity = Math.random() * 0.4 + 0.1;
+                this.color = `rgba(210, 140, 110, ${this.opacity})`;
+                this.swing = Math.random() * Math.PI * 2;
+                this.swingSpeed = 0.01 + Math.random() * 0.02;
             }
-        });
-    }, 200);
-    
-    setTimeout(() => {
-        dossier.classList.remove('show');
-        setTimeout(() => {
-            if (dossierElement?.parentElement) dossierElement.remove();
-            dossierElement = null;
-            clearInterval(glitchInterval);
-        }, 400);
-    }, 6000);
-}
-
-    function createTriangle(x, y) {
-        if (triangle) triangle.remove();
-        if (animationId) cancelAnimationFrame(animationId);
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.swing += this.swingSpeed;
+                this.x += Math.sin(this.swing) * 0.2;
+                
+                if (this.x < -20) this.x = width + 20;
+                if (this.x > width + 20) this.x = -20;
+                if (this.y < -20) this.y = height + 30;
+                if (this.y > height + 30) this.y = -20;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                // легкое свечение
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = "rgba(230, 160, 120, 0.3)";
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
         
-        const tri = document.createElement('div');
-        tri.className = 'triangle';
-        tri.style.left = (x - 20) + 'px';
-        tri.style.top = (y - 35) + 'px';
-        document.body.appendChild(tri);
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push(new Particle());
+            }
+        }
         
-        let posY = y - 35, vel = 0;
-        const gravity = 0.8, ground = window.innerHeight - 50;
+        function animateParticles() {
+            if (!ctx) return;
+            ctx.clearRect(0, 0, width, height);
+            for (let p of particles) {
+                p.update();
+                p.draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
         
-        function fall() {
-            if (!tri?.parentElement) return;
-            vel += gravity;
-            posY += vel;
-            if (posY >= ground) {
-                tri.style.opacity = '0';
+        function handleResize() {
+            resizeCanvas();
+            initParticles();
+        }
+        
+        resizeCanvas();
+        initParticles();
+        animateParticles();
+        window.addEventListener('resize', handleResize);
+        
+        // ---------- 2. Логика кнопок и "Урааа" ----------
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const actionsContainer = document.getElementById('actionsArea');
+        const proposalContainer = document.getElementById('proposalContainer');
+        const fullscreenUra = document.getElementById('fullscreenUra');
+        
+        let isAccepted = false;
+        
+        // Функция для случайной позиции кнопки "Нет" внутри контейнера действий
+        function getRandomPositionInside(btnElement) {
+            if (!actionsContainer) return { left: 0, top: 0 };
+            const containerRect = actionsContainer.getBoundingClientRect();
+            const btnRect = btnElement.getBoundingClientRect();
+            
+            const containerWidth = containerRect.width;
+            const containerHeight = containerRect.height;
+            const btnWidth = btnElement.offsetWidth;
+            const btnHeight = btnElement.offsetHeight;
+            
+            const maxLeft = Math.max(0, containerWidth - btnWidth - 16);
+            const maxTop = Math.max(0, containerHeight - btnHeight - 16);
+            
+            let randomLeft = Math.random() * maxLeft;
+            let randomTop = Math.random() * maxTop;
+            randomLeft = Math.min(maxLeft, Math.max(0, randomLeft));
+            randomTop = Math.min(maxTop, Math.max(0, randomTop));
+            return { left: randomLeft, top: randomTop };
+        }
+        
+        function fleeNoButton() {
+            if (isAccepted) return;
+            if (!noBtn.classList.contains('escape-mode')) {
+                noBtn.classList.add('escape-mode');
+                noBtn.style.position = 'absolute';
+            }
+            const { left, top } = getRandomPositionInside(noBtn);
+            noBtn.style.left = `${left}px`;
+            noBtn.style.top = `${top}px`;
+            noBtn.style.right = 'auto';
+            noBtn.style.bottom = 'auto';
+        }
+        
+        function handleEscape(e) {
+            if (isAccepted) return;
+            if (e.type === 'click') {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            fleeNoButton();
+            if ('vibrate' in navigator && e.type !== 'mouseenter') {
+                navigator.vibrate(12);
+            }
+        }
+        
+        noBtn.addEventListener('mouseenter', handleEscape);
+        noBtn.addEventListener('click', handleEscape);
+        noBtn.addEventListener('touchstart', handleEscape, { passive: false });
+        
+        function repositionNoIfNeeded() {
+            if (!isAccepted && noBtn.classList.contains('escape-mode')) {
+                const { left, top } = getRandomPositionInside(noBtn);
+                noBtn.style.left = `${left}px`;
+                noBtn.style.top = `${top}px`;
+            }
+        }
+        window.addEventListener('resize', () => setTimeout(repositionNoIfNeeded, 50));
+        window.addEventListener('orientationchange', () => setTimeout(repositionNoIfNeeded, 60));
+        
+        // Генерация плавающих сердечек при "Урааа"
+        function createFloatingHearts() {
+            const container = fullscreenUra;
+            const heartsCount = 70;
+            for (let i = 0; i < heartsCount; i++) {
                 setTimeout(() => {
-                    tri.remove();
-                    triangle = null;
-                    isFalling = false;
-                    if (!questionShown) {
-                        scpQuestion.classList.add('show');
-                        questionShown = true;
-                    }
-                }, 100);
-                return;
-            }
-            tri.style.top = posY + 'px';
-            animationId = requestAnimationFrame(fall);
-        }
-        
-        animationId = requestAnimationFrame(fall);
-        triangle = tri;
-    }
-
-    hero.addEventListener('click', (e) => {
-        e.stopPropagation();
-        hero.classList.add('shake');
-        setTimeout(() => hero.classList.remove('shake'), 300);
-        
-        clickCount++;
-        clearTimeout(clickTimer);
-        clickTimer = setTimeout(() => clickCount = 0, 800);
-        
-        if (clickCount === 3 && !isFalling) {
-            clickCount = 0;
-            clearTimeout(clickTimer);
-            isFalling = true;
-            const rect = hero.getBoundingClientRect();
-            createTriangle(rect.left + rect.width/2, rect.top + rect.height/2);
-        }
-    });
-
-    scpQuestion.addEventListener('click', () => {
-        showTornDossier();
-    });
-
-    // Кодовый замок + сингулярность
-    const blackHoleCore = document.getElementById('singularity');
-    const codeLockOverlay = document.getElementById('codeLockOverlay');
-    const codeInput = document.getElementById('codeInput');
-    const submitCode = document.getElementById('submitCode');
-    const closeCodeLock = document.getElementById('closeCodeLock');
-    const codeError = document.getElementById('codeError');
-    const cmdTerminal = document.getElementById('cmdTerminal');
-    const cmdClose = document.getElementById('cmdClose');
-    const permanentDossierEl = document.getElementById('permanentDossier');
-    const dossierCloseBtn = document.getElementById('dossierClose');
-    let dossierUnlocked = false;
-
-    blackHoleCore.addEventListener('click', () => {
-        if (dossierUnlocked) {
-            permanentDossierEl.classList.add('active');
-        } else {
-            codeLockOverlay.classList.add('active');
-            codeInput.value = '';
-            codeError.textContent = '';
-        }
-    });
-
-    submitCode.addEventListener('click', () => {
-        if (codeInput.value.toUpperCase() === 'DENMARK01') {
-            codeLockOverlay.classList.remove('active');
-            cmdTerminal.classList.add('active');
-            const cmdBody = document.getElementById('cmdBody');
-            cmdBody.innerHTML = '<div class="cmd-line">> ACCESSING SECURE DATABASE...</div>';
-            const lines = ['> VERIFYING CREDENTIALS...', '> CREDENTIALS ACCEPTED', '> INITIATING IDENTITY PROTOCOL...', '> SCANNING USER BIOMETRICS...', '> IDENTITY CONFIRMED', '> ACCESS GRANTED • WELCOME, LEVEL 5 PERSONNEL', '> LOADING CLASSIFIED DOSSIER...'];
-            let i = 0;
-            const interval = setInterval(() => {
-                if (i < lines.length) {
-                    const line = document.createElement('div');
-                    line.className = 'cmd-line';
-                    line.textContent = lines[i];
-                    cmdBody.appendChild(line);
-                    cmdBody.scrollTop = cmdBody.scrollHeight;
-                    i++;
-                } else {
-                    clearInterval(interval);
+                    const heart = document.createElement('div');
+                    heart.className = 'floating-heart';
+                    const icons = ['❤️', '💖', '💗', '💓', '💕', '🌸', '✨', '💘', '🎈', '⭐', '💞'];
+                    heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.fontSize = (Math.random() * 2.2 + 1) + 'rem';
+                    heart.style.animationDuration = (Math.random() * 2.5 + 2.5) + 's';
+                    heart.style.animationDelay = Math.random() * 0.8 + 's';
+                    heart.style.opacity = Math.random() * 0.65 + 0.25;
+                    container.appendChild(heart);
+                    
                     setTimeout(() => {
-                        cmdTerminal.classList.remove('active');
-                        permanentDossierEl.classList.add('active');
-                        dossierUnlocked = true;
-                    }, 1000);
-                }
-            }, 600);
-        } else {
-            codeError.textContent = '❌ НЕВЕРНЫЙ КОД • ДОСТУП ЗАПРЕЩЁН';
-            codeInput.value = '';
-        }
-    });
-
-    closeCodeLock.addEventListener('click', () => {
-        codeLockOverlay.classList.remove('active');
-    });
-
-    cmdClose.addEventListener('click', () => {
-        cmdTerminal.classList.remove('active');
-    });
-
-    dossierCloseBtn.addEventListener('click', () => {
-        permanentDossierEl.classList.remove('active');
-    });
-
-    // Бургер
-    const burger = document.getElementById('burgerBtn');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    
-    function closeMenu() { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
-    function openMenu() { sidebar.classList.add('open'); overlay.classList.add('active'); }
-    
-    burger.addEventListener('click', () => sidebar.classList.contains('open') ? closeMenu() : openMenu());
-    overlay.addEventListener('click', closeMenu);
-
-    // Навигация
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('.section');
-    
-    function activateSection(sectionId) {
-        sections.forEach(s => s.classList.remove('active-section'));
-        document.getElementById(sectionId).classList.add('active-section');
-        history.pushState(null, '', `#${sectionId}`);
-    }
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            activateSection(link.dataset.section);
-            if (window.innerWidth < 768) closeMenu();
-        });
-    });
-    
-    window.addEventListener('load', () => {
-        const hash = location.hash.substring(1);
-        if (['rules-general', 'rp-summary', 'stalker', 'scp'].includes(hash)) activateSection(hash);
-    });
-    
-    // Спойлеры
-    document.querySelectorAll('.spoiler-header').forEach(header => {
-        header.addEventListener('click', () => {
-            const content = document.getElementById(header.dataset.spoiler);
-            if (content) {
-                content.classList.toggle('open');
-                header.classList.toggle('open');
+                        if (heart && heart.remove) heart.remove();
+                    }, 4800);
+                }, i * 45);
             }
+        }
+        
+        // Показать полноэкранное "Урааа" и убрать предложение
+        function showFullscreenCelebration() {
+            if (isAccepted) return;
+            isAccepted = true;
+            
+            // плавное скрытие карточки с предложением
+            proposalContainer.classList.add('hide');
+            
+            // показ полноэкранного "Урааа"
+            fullscreenUra.classList.add('show');
+            
+            // создаём красивый дождь из сердечек
+            createFloatingHearts();
+            
+            // дополнительно: чуть подергаем фон частиц (небольшая анимация)
+            if (canvas) {
+                canvas.style.transition = 'opacity 1s';
+                canvas.style.opacity = '0.5';
+            }
+        }
+        
+        // Нажатие на кнопку ДА
+        yesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showFullscreenCelebration();
         });
-    });
+        
+        // Также если пользователь после согласия случайно нажмет на "Нет" (уже скрыто), но на всякий случай ничего не ломается.
+        // Исчезновение контейнера полностью убирает доступ к кнопкам.
+        setTimeout(() => {
+            if (!isAccepted && noBtn.classList.contains('escape-mode')) {
+                const { left, top } = getRandomPositionInside(noBtn);
+                noBtn.style.left = `${left}px`;
+                noBtn.style.top = `${top}px`;
+            }
+        }, 100);
+        
+        // легкая пауза, чтобы частицы выглядели плавно и фон был эстетичным
+        // добавим свечение кнопки ДА
+        yesBtn.style.transition = 'all 0.25s';
+    })();
 </script>
 </body>
 </html>
