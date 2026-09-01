@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HLRP | Helkin Roleplay</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #050a12;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(2, 6, 14, 0.82);
+            background: radial-gradient(ellipse at center, rgba(2, 6, 14, 0.65) 0%, rgba(0, 2, 6, 0.92) 100%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .main-card {
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            padding: 10px 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 45px;
+            flex-wrap: wrap;
+            gap: 15px 30px;
+            padding: 0 10px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #d0e8ff;
+            letter-spacing: 3px;
+            text-shadow: 0 0 40px rgba(40, 140, 255, 0.08);
+        }
+
+        .logo span {
+            color: #4a9eff;
+            text-shadow: 0 0 40px rgba(40, 140, 255, 0.15);
+        }
+
+        .logo-sub {
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: rgba(120, 180, 240, 0.20);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .tab-link {
+            color: rgba(120, 180, 240, 0.20);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.4s;
+            padding: 4px 0;
+            background: none;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .tab-link:hover {
+            color: rgba(120, 180, 240, 0.50);
+        }
+
+        .tab-link.active {
+            color: #8cc4ff;
+            text-shadow: 0 0 30px rgba(40, 140, 255, 0.10);
+        }
+
+        .tab-content {
+            margin-top: 10px;
+        }
+
+        .tab-page {
+            display: none;
+            animation: fadeIn 0.4s ease;
+            background: rgba(4, 10, 20, 0.55);
+            backdrop-filter: blur(12px);
+            padding: 45px 50px;
+            border-radius: 28px;
+            border: 1px solid rgba(60, 140, 220, 0.04);
+            box-shadow: 0 8px 80px rgba(0, 0, 0, 0.6);
+        }
+
+        .tab-page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            color: rgba(60, 140, 220, 0.20);
+            padding: 5px 20px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border: 1px solid rgba(60, 140, 220, 0.05);
+            border-radius: 50px;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 {
+            font-size: 4.2rem;
+            font-weight: 900;
+            color: #dceaff;
+            line-height: 1.05;
+            letter-spacing: -1px;
+            text-shadow: 0 4px 50px rgba(0, 0, 0, 0.7);
+        }
+
+        .hero h1 .hl {
+            background: linear-gradient(135deg, #6ab0ff, #2a7aff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h2 {
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: rgba(120, 180, 240, 0.15);
+            margin-top: 8px;
+            letter-spacing: 8px;
+            text-shadow: 0 2px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-desc {
+            max-width: 560px;
+            margin: 28px auto 38px;
+            font-weight: 300;
+            color: rgba(160, 200, 240, 0.35);
+            font-size: 1rem;
+            line-height: 1.9;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0a2a4a, #061a30);
+            color: #b0d0f0;
+            padding: 14px 44px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(60, 140, 220, 0.04);
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0f3a5e, #08203a);
+            border-color: rgba(60, 140, 220, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(60, 140, 220, 0.02);
+            color: rgba(160, 200, 240, 0.25);
+            padding: 14px 44px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            border: 1px solid rgba(60, 140, 220, 0.04);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(60, 140, 220, 0.04);
+            border-color: rgba(60, 140, 220, 0.06);
+            color: rgba(180, 210, 255, 0.40);
+            transform: translateY(-2px);
+        }
+
+        /* ===== ПРАВИЛА ===== */
+        .rules-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .rules-section {
+            background: rgba(2, 8, 18, 0.35);
+            padding: 24px 28px;
+            border-radius: 18px;
+            border: 1px solid rgba(60, 140, 220, 0.03);
+            transition: 0.3s;
+        }
+
+        .rules-section:hover {
+            background: rgba(2, 8, 18, 0.50);
+            border-color: rgba(60, 140, 220, 0.05);
+        }
+
+        .rules-section h2 {
+            font-size: 1.3rem;
+            color: #8cc4ff;
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(60, 140, 220, 0.05);
+            padding-bottom: 12px;
+        }
+
+        .rules-section .rule-item {
+            padding: 6px 0 6px 22px;
+            position: relative;
+            color: rgba(160, 200, 240, 0.30);
+            font-weight: 300;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+        }
+
+        .rules-section .rule-item::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: rgba(60, 140, 220, 0.12);
+            font-weight: 700;
+        }
+
+        .rules-section .rule-item strong {
+            color: rgba(120, 180, 240, 0.30);
+            font-weight: 600;
+        }
+
+        .rules-section .rule-item .highlight {
+            color: rgba(100, 170, 240, 0.25);
+            font-weight: 400;
+        }
+
+        .rules-section .rule-item .example {
+            display: block;
+            padding-left: 16px;
+            margin-top: 4px;
+            color: rgba(160, 200, 240, 0.15);
+            font-style: italic;
+            font-size: 0.85rem;
+            border-left: 1px solid rgba(60, 140, 220, 0.04);
+        }
+
+        .green-zone-image {
+            padding: 10px;
+            background: rgba(2, 8, 18, 0.50);
+            border: 1px solid rgba(60, 140, 220, 0.06);
+            border-radius: 16px;
+            margin-top: 12px;
+        }
+
+        .green-zone-image img {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 14px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .green-zone-image .caption {
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: rgba(160, 200, 240, 0.15);
+            text-align: center;
+        }
+
+        /* ===== КАРТА ===== */
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+            border-radius: 18px;
+            background: rgba(2, 8, 18, 0.50);
+            border: 1px solid rgba(60, 140, 220, 0.04);
+            cursor: grab;
+        }
+
+        .map-container:active {
+            cursor: grabbing;
+        }
+
+        .map-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: none;
+            transform-origin: center;
+            pointer-events: none;
+        }
+
+        .map-container img.zoomed {
+            object-fit: none;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+        }
+
+        .map-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .map-controls button {
+            background: rgba(2, 8, 18, 0.60);
+            color: rgba(160, 200, 240, 0.40);
+            border: 1px solid rgba(60, 140, 220, 0.06);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 0.5px;
+        }
+
+        .map-controls button:hover {
+            background: rgba(2, 8, 18, 0.80);
+            border-color: rgba(60, 140, 220, 0.10);
+            color: rgba(160, 200, 240, 0.60);
+        }
+
+        .map-hint {
+            text-align: center;
+            margin-top: 12px;
+            color: rgba(160, 200, 240, 0.15);
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .info-block {
+            background: rgba(2, 8, 18, 0.35);
+            padding: 30px 32px;
+            border-radius: 22px;
+            border: 1px solid rgba(60, 140, 220, 0.02);
+            transition: 0.3s;
+        }
+
+        .info-block:hover {
+            background: rgba(2, 8, 18, 0.50);
+            border-color: rgba(60, 140, 220, 0.04);
+        }
+
+        .info-block h2 {
+            font-size: 1.5rem;
+            color: #a0c8f0;
+            margin-bottom: 22px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(60, 140, 220, 0.04);
+            padding-bottom: 14px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .info-block h3 {
+            font-size: 0.95rem;
+            color: rgba(80, 160, 240, 0.40);
+            margin: 18px 0 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .info-block ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-block ul li {
+            padding: 8px 0 8px 26px;
+            position: relative;
+            color: rgba(160, 200, 240, 0.30);
+            font-weight: 300;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+            font-size: 0.92rem;
+        }
+
+        .info-block ul li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: rgba(60, 140, 220, 0.12);
+            font-weight: 700;
+        }
+
+        .info-block p {
+            color: rgba(160, 200, 240, 0.30);
+            line-height: 1.9;
+            font-weight: 300;
+            font-size: 0.92rem;
+        }
+
+        .lore-block {
+            background: rgba(60, 140, 220, 0.02);
+            padding: 16px 20px;
+            border-radius: 12px;
+            border-left: 2px solid rgba(60, 140, 220, 0.06);
+            margin: 12px 0;
+            font-style: italic;
+            color: rgba(140, 190, 240, 0.20);
+            font-weight: 300;
+        }
+
+        .info-block strong {
+            color: rgba(120, 180, 240, 0.30);
+            font-weight: 600;
+        }
+
+        .lore-story {
+            color: rgba(160, 200, 240, 0.30);
+            font-weight: 300;
+            font-size: 0.92rem;
+            line-height: 1.9;
+        }
+
+        .lore-story p {
+            margin-bottom: 16px;
+        }
+
+        .lore-story .year {
+            color: rgba(100, 170, 240, 0.25);
+            font-weight: 400;
+        }
+
+        .lore-divider {
+            border: none;
+            border-top: 1px solid rgba(60, 140, 220, 0.04);
+            margin: 20px 0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(60, 140, 220, 0.02);
+            color: rgba(120, 180, 240, 0.05);
+            font-size: 0.7rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .footer strong {
+            font-weight: 600;
+            color: rgba(120, 180, 240, 0.06);
+        }
+
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 700px) {
+            body { padding: 15px; }
+            .header { flex-direction: column; align-items: center; text-align: center; padding: 0; gap: 12px; }
+            .logo-area { justify-content: center; flex-wrap: wrap; }
+            .nav-tabs { justify-content: center; flex-wrap: wrap; gap: 12px 20px; }
+            .tab-page { padding: 25px 18px; }
+            .hero h1 { font-size: 2.6rem; }
+            .hero h2 { font-size: 1rem; letter-spacing: 4px; }
+            .actions { flex-direction: column; align-items: center; }
+            .btn-primary, .btn-secondary { width: 100%; text-align: center; justify-content: center; }
+            .rules-section { padding: 18px; }
+            .info-block { padding: 20px; }
+            .green-zone-image img { max-width: 100%; }
+            .map-container { height: 350px; }
+            .map-controls button { padding: 8px 16px; font-size: 0.75rem; }
+        }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: rgba(2, 6, 14, 0.9); }
+        ::-webkit-scrollbar-thumb { background: rgba(60, 140, 220, 0.06); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(60, 140, 220, 0.10); }
+    </style>
+</head>
+<body>
+
+    <div class="main-card">
+
+        <div class="header">
+            <div class="logo-area">
+                <div class="logo">HL<span>RP</span></div>
+                <div class="logo-sub">Helkin Roleplay</div>
+            </div>
+            <div class="nav-tabs">
+                <button class="tab-link active" data-tab="main">Главная</button>
+                <button class="tab-link" data-tab="rules">Правила</button>
+                <button class="tab-link" data-tab="lore">Лор</button>
+                <button class="tab-link" data-tab="map">Карта</button>
+            </div>
+        </div>
+
+        <div class="tab-content">
+
+            <!-- ======== ГЛАВНАЯ ======== -->
+            <div id="main" class="tab-page active">
+                <div class="hero">
+                    <div class="hero-badge">⚡ Добро пожаловать</div>
+                    <h1>НАЧНИ СВОЮ<br><span class="hl">ИСТОРИЮ</span></h1>
+                    <h2>HLRP · STALKER RP</h2>
+                    <p class="hero-desc">
+                        Сталкер РП — это не стрелялки. Это Зона, где каждый ищет свой путь и судьбу, а не просто постреляться.
+                    </p>
+                    <div class="actions">
+                        <a href="https://store.steampowered.com/app/2027330/GoreBox/" target="_blank" class="btn-primary">🎮 Скачать GoreBox</a>
+                        <a href="https://t.me/HLRPproject" target="_blank" class="btn-secondary">📱 Telegram</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== ПРАВИЛА ======== -->
+            <div id="rules" class="tab-page">
+                <div class="rules-wrapper">
+
+                    <div class="rules-section">
+                        <h2>Раздел 1. Порог вхождения на сервер</h2>
+                        <div class="rule-item"><strong>1.1.1.</strong> Сталкер РП на нашем проекте строго с <span class="highlight">14 лет</span>. Если вы младше, но готовы серьёзно играть и относиться ко всему с ответственностью — мы можем вас принять.</div>
+                        <div class="rule-item"><strong>1.2.1.</strong> Согласно лору сервера — на данный момент <span class="highlight">2020 год</span>. День и месяц совпадают с реальным днём и месяцем.</div>
+                        <div class="rule-item"><strong>1.3.1.</strong> Если у вас отсутствует микрофон или он ужасного качества — стоит понимать, что вы портите игровой процесс другим людям.</div>
+                        <div class="rule-item"><strong>1.4.1.</strong> Запрещено использовать ники, оскорбляющие других игроков или нарушающие атмосферу Зоны (например, имена поп-звёзд, политиков, мемов).</div>
+                        <div class="rule-item"><strong>1.5.1.</strong> Перед началом игры рекомендуется ознакомиться с лором сервера и основными группировками — это поможет глубже погрузиться в атмосферу и избежать случайных нарушений.</div>
+                    </div>
+
+                    <div class="rules-section">
+                        <h2>Раздел 2. Общие правила</h2>
+                        <div class="rule-item"><strong>2.1.1. NRP (Non-RolePlay)</strong> — действие, нарушающее логику игры или сеттинга, совершённое без отыгрыша роли. Запрещён NRP. Запрещены действия, не соответствующие вашей роли и реальности игрового мира. Игрок обязан отыгрывать выбранную роль правдоподобно, даже если это невыгодно.</div>
+                        <div class="rule-item"><strong>2.1.2. GRP (Great RP)</strong> — Отличное РП. Проект старается придерживаться канона, поэтому любые интересные и каноничные отыгровки приветствуются и даже могут вознаграждаться.</div>
+                        <div class="rule-item"><strong>2.1.3.</strong> При написании в чат нон-рп сообщения после написания используйте <span class="highlight">«//»</span>. Например: <span class="example">«Админ нужна помощь//»</span></div>
+                        <div class="rule-item"><strong>2.2.1. DM (Death Match)</strong> — убийство другого игрока без РП-причины. Например: вы встретили игрока вражеской группировки, однако вы находитесь вне состояния войны и не можете стрелять в первые секунды встречи.</div>
+                        <div class="rule-item"><strong>2.3.1.</strong> Если игрок оскорбил вас на сервере (в РП-процессе), то вы имеете право убить его, даже если он полностью безоружен.</div>
+                        <div class="rule-item"><strong>2.3.2.</strong> Однако если людей много или 1, но с направленным оружием — вы уже нарушаете правило <span class="highlight">Пауэргейминг</span>.</div>
+                        <div class="rule-item"><strong>2.4.1. Пауэргейминг (Powergaming)</strong> — действие, где игрок описывает/совершает нечто нереалистичное (мгновенное убийство без причины или игнорирование окружения). Нарушает правило реализма.</div>
+                        <div class="rule-item"><strong>2.5.1. Метагейминг (MG)</strong> — применение информации, полученной нон-рп путём (например, из Telegram или Discord в нон-рп чатах).</div>
+                        <div class="rule-item"><strong>2.6.1. Спавнкилл (Spawn Kill)</strong> — убийство на спавне группировок или сталкеров. Со спавна должно пройти как минимум <span class="highlight">15 секунд</span>, чтобы вы имели право его убить или он вас.</div>
+                        <div class="rule-item"><strong>2.6.2.</strong> Если вас убили во время штурма или рейда вашей базы — вы должны оставаться на спавне и ждать окончания рейда. (Подробные правила рейдов — ниже).</div>
+                        <div class="rule-item"><strong>2.7.1. Горный геймплей (Mountain Play)</strong> — запрещено залазить на горы и передвигаться по ним, а тем более вести из них огонь (касается только очень больших гор, которые определяют границы карты).</div>
+                        <div class="rule-item"><strong>2.8.1.</strong> Запрещено выходить во время РП-процесса или перестрелки. Если у вас вылетел интернет или игра — вы должны отписаться на форуме о том, что случилось.</div>
+                        <div class="rule-item"><strong>2.9.1.</strong> Когда вас убили на каком-то месте — вы не можете прийти на то же место в течение <span class="highlight">15 минут</span>.</div>
+                        <div class="rule-item"><strong>2.10.1.</strong> Запрещено резко приседать или делать невозможные движения во время ПВП. Любая драка или перестрелка должна выглядеть реалистично.</div>
+                    </div>
+
+                    <div class="rules-section">
+                        <h2>Раздел 3. Предупредительный выстрел</h2>
+                        <div class="rule-item"><strong>3.1.1.</strong> Предупредительным выстрелом считается, когда игрок стреляет в сторону врага, либо в небо, либо под ноги.</div>
+                        <div class="rule-item"><strong>3.2.1.</strong> Если после предупредительного выстрела убегающий человек не останавливается через <span class="highlight">5 секунд</span> — вы можете его убивать.</div>
+                        <div class="rule-item"><strong>3.3.1.</strong> Предупредительный выстрел по машине осуществляется по колёсам транспортного средства и имеет такие же правила, как и по людям.</div>
+                        <div class="rule-item"><strong>3.4.1.</strong> Если в машине находятся пассажиры — предупредительный выстрел делается по капоту или колёсам. Стрельба по салону без предупреждения считается DM.</div>
+                        <div class="rule-item"><strong>3.5.1.</strong> Запрещено делать более одного предупредительного выстрела в одного и того же игрока в течение короткого времени — это считается фейковым РП.</div>
+                    </div>
+
+                    <div class="rules-section">
+                        <h2>Раздел 4. Правила зелёных зон</h2>
+                        <div class="rule-item"><strong>4.1.1.</strong> Зелёная зона — это безопасное пространство, где боевые действия и насилие строго запрещены правилами сервера. Зелёная зона начинается от забора баз группировок <span class="highlight">+ 10 метров</span> от него. <span class="example">(Исключение: во время рейда или штурма боевые действия возможны)</span></div>
+
+                        <div class="green-zone-image">
+                            <img src="green_zone.jpg" alt="Зелёная зона — КПП военных">
+                            <div class="caption">Пример зелёной зоны (КПП военных)</div>
+                        </div>
+
+                        <div class="rule-item"><strong>4.2.1.</strong> На территории зелёной зоны можно проводить кулачные бои, но только после одобрения главного на территории ЗЗ.</div>
+                        <div class="rule-item"><strong>4.3.1.</strong> Запрещено носить оружие в руках в зелёной зоне — оно должно быть убрано в слот или за спину. Исключение — если вы только зашли и ещё не успели убрать.</div>
+                        <div class="rule-item"><strong>4.4.1.</strong> Провокации, оскорбления и угрозы в зелёной зоне разрешены, но любые боевые действия (даже ответные) караются баном. Если вас оскорбляют — вызывайте администратора.</div>
+                    </div>
+
+                    <div class="rules-section">
+                        <h2>Раздел 5. Правила рейдов и штурма</h2>
+                        <div class="rule-item"><strong>5.1.1.</strong> Рейд можно начать только после <span class="highlight">одобрения администрации</span> на сервере.</div>
+                        <div class="rule-item"><strong>5.2.1.</strong> Во время рейда или штурма запрещается покидать место столкновения.</div>
+                        <div class="rule-item"><strong>5.3.1.</strong> После смерти вы обязаны оставаться на спавне до окончания рейда или штурма.</div>
+                        <div class="rule-item"><strong>5.4.1.</strong> Рейд нельзя начать против группировки, которой нету на сервере, или если их количество в меньшинстве.</div>
+                        <div class="rule-item"><strong>5.5.1.</strong> Перед началом рейда необходимо предупредить противников в голосовой чат или текстом за <span class="highlight">5 минут</span> до начала.</div>
+                        <div class="rule-item"><strong>5.6.1.</strong> Рейд не должен длиться более <span class="highlight">40 минут</span> с момента первого выстрела. По истечении времени стороны обязаны прекратить огонь и разойтись.</div>
+                    </div>
+
+                    <div class="rules-section">
+                        <h2>Раздел 6. Правила ГОП-СТОПОВ</h2>
+                        <div class="rule-item"><strong>6.1.1.</strong> Одиночкам запрещено проводить гоп-стопы в любом виде.</div>
+                        <div class="rule-item"><strong>6.2.1.</strong> Гоп-стоп может совершиться только если в группе тех, кто собирается гоп-стопить, не менее <span class="highlight">3-х человек</span>.</div>
+                        <div class="rule-item"><strong>6.3.1.</strong> При гоп-стопе запрещено отбирать всё имущество жертвы — максимум <span class="highlight">2 предмета</span> или оружие с патронами. Полный обдир считается NRP.</div>
+                        <div class="rule-item"><strong>6.4.1.</strong> Если жертва оказывает сопротивление и погибает — гоп-стоп считается завершённым. Добивать лежачего без причины запрещено.</div>
+                        <div class="rule-item"><strong>6.5.1.</strong> Повторный гоп-стоп одного и того же игрока в течение <span class="highlight">1 часа</span> запрещён — это считается гриферством.</div>
+                    </div>
+
+                    <div class="rules-section">
+                        <h2>Раздел 7. Общие запреты</h2>
+                        <div class="rule-item"><strong>7.1.1.</strong> Запрещено использовать любые сторонние программы, читы, баги и ошибки игры для получения преимущества. За нарушение — <span class="highlight">перманентный бан</span>.</div>
+                        <div class="rule-item"><strong>7.2.1.</strong> Запрещено намеренное создание лагов, дизконнект во время боя или РП-ситуации для избежания последствий (<span class="highlight">Rage Quit</span>).</div>
+                        <div class="rule-item"><strong>7.3.1.</strong> Запрещён спам в текстовый и голосовой чат, а также использование нецензурной лексики в адрес других игроков вне РП-контекста.</div>
+                        <div class="rule-item"><strong>7.4.1.</strong> Запрещено создавать персонажей с именами, оскорбляющими других игроков или нарушающими сеттинг игры (например, «Putin», «BTS_Stan» и т.п.).</div>
+                        <div class="rule-item"><strong>7.5.1.</strong> Запрещено намеренное блокирование проходов, спавнов и важных точек карты без РП-причины.</div>
+                        <div class="rule-item"><strong>7.6.1.</strong> Запрещено использовать сленг и отсылки к современной поп-культуре внутри РП-процесса (например, говорить про TikTok или iPhone в Зоне).</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ======== ЛОР ======== -->
+            <div id="lore" class="tab-page">
+                <div class="content-grid" style="display: grid; grid-template-columns: 1fr; gap: 30px;">
+                    <div class="info-block" style="grid-column: 1;">
+                        <h2>📖 Лор Зоны</h2>
+                        <div class="lore-story">
+
+                            <p>Слушай, новичок. Всё началось не с аварии, нет. Та, чернобыльская, была лишь ширмой.</p>
+
+                            <p><span class="year">1986 год.</span> Сразу после взрыва сюда приехали не только ликвидаторы. В подземных бункерах открылись лаборатории. Учёные хотели дотянуться до ноосферы – до самого разума Земли, слышал такое? Они думали, что управляют мыслями, а на самом деле копали могилу.</p>
+
+                            <p><span class="year">2006 год.</span> Грянул Первый Выброс. Это был не просто взрыв. Это был крик самой планеты. Зона родилась в тот миг – с аномалиями, которые плюют на законы физики, с мутантами, что и снятся только в кошмарах, и с артефактами, за которые люди убивают друг друга. А те учёные... они не умерли. Стали единым О-Сознанием. И создали Монолит, чтобы дурить сталкерам головы, уводя их от правды к центру.</p>
+
+                            <hr class="lore-divider">
+
+                            <p><span class="year">2011 год.</span> Зону лихорадило. Выбросы шли один за другим. Группировка «Чистое небо» отправила к ЧАЭС бойца по прозвищу Шрам. Им нужно было остановить одного настырного сталкера – Стрелка. Этот псих решил, что дойдёт до самого сердца. Шрам его ранил, но опоздал. Грянул Второй Сверхвыброс – и «Чистое небо» стёрло с карты Зоны.</p>
+
+                            <p><span class="year">2012 год.</span> К нам пришёл Меченый. Он не помнил даже своего имени. Думал, что ищет этого самого Стрелка. А когда нашёл... понял, что Стрелок – это он сам. О-Сознание промыло ему мозги и сделало марионеткой. Но Меченый выстоял. Он уничтожил Выжигатель Мозгов, прорвался к центру и разбил купол Монолита. Открыл дорогу к ЧАЭС для всех – и для людей, и для тварей. Это был переломный год.</p>
+
+                            <p><span class="year">2012 год.</span> Военные решили: «Хватит, Зона будет нашей». Операция «Фарватер». Послали вертолёты. Красиво, грозно... Ни один не вернулся. В Припять отправили майора Дегтярёва – умного, злого, с упёртым взглядом. Он раскопал, что вертушки побили новые аномалии. Вместе с тем же Стрелком он выбрался из города живым, а Стрелка потом пристроили к учёным. С тех пор его имя стало легендой.</p>
+
+                            <hr class="lore-divider">
+
+                            <p>А потом настала тишина. Не добрая, нет. Зубы скрежещет тишина.</p>
+
+                            <p>Зона жила своей жизнью. Сталкеры шли за хабаром, «Долг» грызся со «Свободой» за то, что делать с этой землёй. Монолитовцы, которых Меченый вырубил из-под контроля, очнулись и бродили вокруг, потерянные, ища новую веру. Проходили годы. Кто-то умирал, кто-то уходил, кто-то сходил с ума. Зона менялась медленно, но неумолимо – как старый зверь, который зализывает раны и ждёт.</p>
+
+                            <p><span class="year">2020 год.</span> За кордоном – своя жизнь, свои войны, свои беды. А здесь, внутри, всё осталось по-старому. Всё те же аномалии, те же твари, тот же запах горелого металла и мокрой земли по утрам. Никто не знает, что будет дальше. Зона молчит. И это молчание страшнее любого Выброса.</p>
+
+                            <div class="lore-block" style="margin-top:20px;">
+                                «Зона не прощает ошибок. Но она даёт шанс тем, кто готов рискнуть...»
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ======== КАРТА ======== -->
+            <div id="map" class="tab-page">
+                <div style="text-align: center; margin-bottom: 16px;">
+                    <h2 style="color: #a0c8f0; font-weight: 700; letter-spacing: 1px; font-size: 1.5rem;">🗺️ Карта Зоны</h2>
+                    <p style="color: rgba(160, 200, 240, 0.20); font-size: 0.85rem; font-weight: 300;">Карта зоны на момент 2020 года.</p>
+                </div>
+
+                <div class="map-container" id="mapContainer">
+                    <img src="map.jpg" alt="Карта Зоны" id="mapImage">
+                </div>
+
+                <div class="map-controls">
+                    <button onclick="zoomIn()">➕ Приблизить</button>
+                    <button onclick="zoomOut()">➖ Отдалить</button>
+                    <button onclick="resetZoom()">⟲ Сбросить</button>
+                </div>
+                <div class="map-hint">Зажми и тащи, чтобы перемещаться по карте. Нажми 2 раза чтобы сбросить положение карты и крути колёсико для приближения и отдаления.</div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>© 2026 <strong>HLRP · Helkin Roleplay</strong> | Сделано с любовью для Зоны</p>
+        </div>
+
+    </div>
+
+    <!-- ===== СКРИПТ ДЛЯ КАРТЫ ===== -->
+    <script>
+        // Переключение вкладок
+        const tabs = document.querySelectorAll('.tab-link');
+        const pages = {
+            main: document.getElementById('main'),
+            rules: document.getElementById('rules'),
+            lore: document.getElementById('lore'),
+            map: document.getElementById('map')
+        };
+
+        tabs.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabs.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                Object.values(pages).forEach(page => page.classList.remove('active'));
+
+                const tabName = this.getAttribute('data-tab');
+                if (pages[tabName]) {
+                    pages[tabName].classList.add('active');
+                }
+            });
+        });
+
+        // ===== ЛОГИКА КАРТЫ =====
+        const container = document.getElementById('mapContainer');
+        const mapImage = document.getElementById('mapImage');
+
+        let scale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        let isDragging = false;
+        let startX, startY, startTranslateX, startTranslateY;
+
+        function updateMap() {
+            mapImage.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+        }
+
+        // Приблизить
+        function zoomIn() {
+            if (scale < 3) {
+                scale += 0.2;
+                updateMap();
+            }
+        }
+
+        // Отдалить
+        function zoomOut() {
+            if (scale > 0.5) {
+                scale -= 0.2;
+                updateMap();
+            }
+        }
+
+        // Сброс
+        function resetZoom() {
+            scale = 1;
+            translateX = 0;
+            translateY = 0;
+            updateMap();
+        }
+
+        // Колесико мыши
+        container.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            if (e.deltaY < 0) {
+                zoomIn();
+            } else {
+                zoomOut();
+            }
+        });
+
+        // Перетаскивание
+        container.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startTranslateX = translateX;
+            startTranslateY = translateY;
+            container.style.cursor = 'grabbing';
+        });
+
+        window.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            translateX = startTranslateX + dx;
+            translateY = startTranslateY + dy;
+            updateMap();
+        });
+
+        window.addEventListener('mouseup', function() {
+            isDragging = false;
+            container.style.cursor = 'grab';
+        });
+
+        // Touch support для мобильных
+        let touchStartX, touchStartY, touchTranslateX, touchTranslateY;
+
+        container.addEventListener('touchstart', function(e) {
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            touchTranslateX = translateX;
+            touchTranslateY = translateY;
+        });
+
+        container.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const dx = touch.clientX - touchStartX;
+            const dy = touch.clientY - touchStartY;
+            translateX = touchTranslateX + dx;
+            translateY = touchTranslateY + dy;
+            updateMap();
+        });
+
+        // Двойной тап для сброса (мобильные)
+        container.addEventListener('dblclick', function() {
+            resetZoom();
+        });
+    </script>
+
+</body>
+</html>
